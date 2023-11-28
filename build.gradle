@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+sourceCompatibility = 1.11
+
+repositories {
+    jcenter()
+}
+dependencies {
+    implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge', version: '1.0.0'
+    implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge-risk', version: '1.0.0'
+    //also consider to add the game in the same manner
+}
+jar {
+    manifest {
+        attributes 'Sge-Type': 'agent'
+        attributes 'Agent-Class': 'src.at.ac.tuwien.ifs.sge.agent.risk.RiskItAgent'
+        attributes 'Agent-Name': 'RiskItForTheBiscuit'
+    }
+}
