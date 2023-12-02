@@ -32,5 +32,6 @@ tasks.register('playAlphaBetaMatch', JavaExec) {
     dependsOn 'build'
     description = 'Build the application and execute another JAR file with arguments'
     classpath = files("game/sge-1.0.2-exe.jar")
+    jvmArgs '-Xmx2g'
     args 'match', 'game/sge-risk-1.0.2-exe.jar', 'game/agents/sge-alphabetaagent-1.0.1.jar', 'build/libs/RiskItForTheBiscuit.jar', '-c', '30000', '--time-unit=MILLISECONDS'
 }
