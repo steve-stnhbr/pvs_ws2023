@@ -25,22 +25,21 @@ public class MCTSTree<T, A> {
         return root;
     }
 
-
     public void simulate(int simulationSteps, long timeout) {
         // Selection Stage
         MCTSNode<T, A> node = selectionStrategy.select(root);
-        System.out.println("Selected node: " + node);
+        //System.out.println("Selected node: " + node);
         // Expansion Stage
         if (node.getVisits() != 0) {
             node = expansionStrategy.expand(node);
-            System.out.println("Expanded node: " + node);
+            //System.out.println("Expanded node: " + node);
         }
         // Simulation Stage
         simulationStrategy.simulate(node, timeout / simulationSteps);
-        System.out.println("Simulated node: " + node);
+        //System.out.println("Simulated node: " + node);
         // Backpropagation Stage
         node.backpropagate(null);
-        System.out.println("ROOT: " + root);
+        //System.out.println("ROOT: " + root);
     }
 
     /**

@@ -18,6 +18,7 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
 
         long startTime = System.nanoTime();
         while (!risk.isGameOver() && System.nanoTime() - startTime <= timeout) {
+            // if the current player is -1, the game performs actions automatically
             if (risk.getCurrentPlayer() < 0) {
                 risk = (Risk) risk.doAction();
                 continue;
@@ -32,7 +33,6 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
         }
 
         node.setUtility(risk.getPlayerUtilityWeight(node.getPlayerId()));
-        System.out.println("Finished simulation with utility: " + node.getUtility());
     }
 
 }
