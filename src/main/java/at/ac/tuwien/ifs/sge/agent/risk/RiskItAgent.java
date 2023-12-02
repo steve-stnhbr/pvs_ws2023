@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   GameAgent<Risk, RiskAction> {
+  public static final int SIMULATION_STEPS = 45;
 
   public RiskItAgent(Logger log) {
     super(3D / 4D, 5, TimeUnit.SECONDS, log);
@@ -41,7 +42,7 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
       new RandomSimulationStrategy(),
       playerId);
     while (!shouldStopComputation()) {
-      tree.simulate(20, TIMEOUT);
+      tree.simulate(SIMULATION_STEPS, TIMEOUT);
     }
 
     new Thread(() -> {
