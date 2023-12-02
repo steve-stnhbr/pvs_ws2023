@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db886a83-3f36-4f40-8b9b-c72564ff3e5d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +141,7 @@
       <updated>1701186275000</updated>
       <workItem from="1701186277149" duration="4103000" />
       <workItem from="1701506411740" duration="19760000" />
-      <workItem from="1701529595331" duration="106000" />
+      <workItem from="1701529595331" duration="182000" />
     </task>
     <servers />
   </component>
