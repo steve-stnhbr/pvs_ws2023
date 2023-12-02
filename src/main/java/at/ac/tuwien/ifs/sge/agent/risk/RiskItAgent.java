@@ -40,8 +40,6 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
       new RandomExpansionStrategy(),
       new RandomSimulationStrategy(),
       playerId);
-    log.debug("Starting MCTS");
-    System.out.println("Starting MCTS");
     while (!shouldStopComputation()) {
       tree.simulate(20, TIMEOUT);
     }
@@ -58,6 +56,7 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
     RiskAction bestAction = tree.getBestAction();
 
     log.debugf("Found best move: %s", bestAction.toString());
+    System.out.println("> " + bestAction.toString());
 
     return bestAction;
   }
