@@ -25,9 +25,6 @@ public class MCTSTree<T, A> {
         return root;
     }
 
-    public void setRoot(MCTSNode<T, A> root) {
-        this.root = root;
-    }
 
     public void simulate(int simulationSteps, long timeout) {
         // Selection Stage
@@ -46,6 +43,10 @@ public class MCTSTree<T, A> {
         System.out.println("ROOT: " + root);
     }
 
+    /**
+     * This method returns the best action according to the current tree. It will return the action accessible from the root node with the highest average utility.
+     * @return The best action according to the current tree.
+     */
     public A getBestAction() {
         return root.getChildren()
           .stream()

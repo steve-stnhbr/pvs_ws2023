@@ -14,7 +14,7 @@ public class MCTSNode<T, A> implements TreeNode {
   private int playerId;
 
   private T state;
-  private A action;
+  private final A action;
 
   public MCTSNode(T state) {
     this(state, null, null, -1);
@@ -28,6 +28,10 @@ public class MCTSNode<T, A> implements TreeNode {
     this.children = new ArrayList<>();
   }
 
+  /**
+   * This method backpropagates the utility of a child node to the parent node.
+   * @param child
+   */
   public void backpropagate(MCTSNode<T, A> child) {
     visits++;
     if (child != null) {
@@ -102,21 +106,25 @@ public class MCTSNode<T, A> implements TreeNode {
     return action;
   }
 
-  public MCTSNode<T, A> setAction(A action) {
-    this.action = action;
-    return this;
-  }
 
-
+  /**
+   * Implements TreeNode interface: This method returns the content of the node. It will be displayed in the tree-visualization.
+   * @return The content of the node.
+   */
   @Override
   public String content() {
     return "(" + visits + ", " + utility + ")";
   }
 
+  /**
+   * Implements TreeNode interface: This method returns the children of the node. They will be displayed in the tree-visualization.
+   * @return The children of the node.
+   */
   @Override
   public List<TreeNode> children() {
     return this.children.stream().map(c -> (TreeNode) c).collect(Collectors.toList());
   }
+
 
   @Override
   public String toString() {
