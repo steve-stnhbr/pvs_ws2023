@@ -5,18 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db886a83-3f36-4f40-8b9b-c72564ff3e5d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/sge-1.0.2-exe.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/sge-risk-1.0.2-exe.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSTree.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/MCTSExpansionStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/RandomExpansionStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/RiskAddAllExpansionStrategyTemplate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/MCTSSelectionStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/MaximizationSelectionStrategyTemplate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/RandomSelectionStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/simulation/MCTSSimulationStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/simulation/RandomSimulationStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/AsyncPrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +34,16 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -38,9 +54,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2YoK1BF3z1ZQqngayE2JadHbJqP" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -51,16 +67,83 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/RiskItForTheBiscuit/src/main/java",
+    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/RiskItForTheBiscuit/lib",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$/game" />
       <recent name="$PROJECT_DIR$/src/main/java" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.RiskItForTheBiscuit [playAlphaBetaMatch]">
+    <configuration name="RiskItForTheBiscuit [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="RiskItForTheBiscuit [playAlphaBetaMatch]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="playAlphaBetaMatch" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.RiskItForTheBiscuit [playAlphaBetaMatch]" />
+      <item itemvalue="Gradle.RiskItForTheBiscuit [dependencies]" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.RiskItForTheBiscuit [dependencies]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -70,11 +153,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1701186275000</updated>
-      <workItem from="1701186277149" duration="118000" />
+      <workItem from="1701186277149" duration="4103000" />
+      <workItem from="1701506411740" duration="17005000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java</url>
+          <line>57</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

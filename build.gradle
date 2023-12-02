@@ -3,20 +3,34 @@ plugins {
     id 'idea'
 }
 
-sourceCompatibility = 1.11
-
 repositories {
     jcenter()
 }
 dependencies {
     implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge', version: '1.0.0'
     implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge-risk', version: '1.0.0'
-    //also consider to add the game in the same manner
+    implementation group: 'hu.webarticum', name: 'tree-printer', version: '2.1.0'
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
     manifest {
         attributes 'Sge-Type': 'agent'
-        attributes 'Agent-Class': 'src.at.ac.tuwien.ifs.sge.agent.risk.RiskItAgent'
+        attributes 'Agent-Class': 'at.ac.tuwien.ifs.sge.agent.risk.RiskItAgent'
         attributes 'Agent-Name': 'RiskItForTheBiscuit'
     }
+}
+
+tasks.register('playAlphaBetaMatch', JavaExec) {
+    dependsOn 'build'
+    description = 'Build the application and execute another JAR file with arguments'
+    classpath = files("game/sge-1.0.2-exe.jar")
+    args 'match', 'game/sge-risk-1.0.2-exe.jar', 'game/agents/sge-alphabetaagent-1.0.1.jar', 'build/libs/RiskItForTheBiscuit.jar', '-c', '30000', '--time-unit=MILLISECONDS'
 }

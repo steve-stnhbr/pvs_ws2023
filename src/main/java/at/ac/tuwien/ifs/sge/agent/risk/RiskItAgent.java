@@ -2,25 +2,26 @@ package at.ac.tuwien.ifs.sge.agent.risk;
 
 import at.ac.tuwien.ifs.sge.agent.AbstractGameAgent;
 import at.ac.tuwien.ifs.sge.agent.GameAgent;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.RandomSelectionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
 import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskBoard;
-import java.util.Set;
+import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
 public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   GameAgent<Risk, RiskAction> {
 
-
   public RiskItAgent(Logger log) {
-    /* instantiates a AbstractGameAgent so that shouldStopComputation() returns true after 3/4ths of
-     * the given time. However, if it can, it will try to compute at least 5 seconds.
-     */
     super(3D / 4D, 5, TimeUnit.SECONDS, log);
-
-    //Note: log can be effectively ignored, however it honors the flags of the engine.
-
     //Do some setup before the TOURNAMENT starts.
   }
 
@@ -34,47 +35,27 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   public RiskAction computeNextAction(Risk game, long computationTime, TimeUnit timeUnit) {
     super.setTimers(computationTime, timeUnit); //Makes sure shouldStopComputation() works
 
-    nanosElapsed(); //returns how many nanos already elapsed.
-    nanosLeft(); //returns how much nanos are left (according to timeOutRatio).
-
-    shouldStopComputation(); //returns true if nanosLeft() < 0 or the current thread is stopped.
-
-    RiskBoard board = game.getBoard();
-    // returns how many territories a player currently occupies
-    board.getNrOfTerritoriesOccupiedByPlayer(playerId);
-
-    //make yourself familiar with the other public methods of board
-
-    //returns the heuristic value i.e. how many territories the given player occupies
-    game.getHeuristicValue();
-    game.getHeuristicValue(playerId); //equivalent
-
-    //returns the next possible actions
-    Set<RiskAction> possibleActions = game.getPossibleActions();
-
-    //gready search for the next best move
-    double bestUtilityValue = Double.NEGATIVE_INFINITY;
-    double bestHeuristicValue = Double.NEGATIVE_INFINITY;
-    RiskAction bestAction = null;
-
-    for (RiskAction possibleAction : possibleActions) {
-      Risk next = (Risk) game.doAction(possibleAction); //create a game with that move applied
-
-      double nextUtilityValue = next.getUtilityValue(playerId);
-      double nextHeuristicValue = next.getHeuristicValue(playerId);
-
-      if (bestUtilityValue <= nextUtilityValue) {
-        if (bestUtilityValue < nextUtilityValue || bestHeuristicValue <= nextHeuristicValue) {
-          bestUtilityValue = nextUtilityValue;
-          bestHeuristicValue = nextHeuristicValue;
-          bestAction = possibleAction;
-        }
-      }
+    MCTSTree<Risk, RiskAction> tree = new MCTSTree<>(game,
+      new RandomSelectionStrategy<>(),
+      new RandomExpansionStrategy(),
+      new RandomSimulationStrategy(),
+      playerId);
+    log.debug("Starting MCTS");
+    System.out.println("Starting MCTS");
+    while (!shouldStopComputation()) {
+      tree.simulate(20, TIMEOUT);
     }
 
-    //maybe do some fallback action in case action is not valid
-    assert bestAction != null;
-    assert game.isValidAction(bestAction);
+    new Thread(() -> {
+      try {
+        new TraditionalTreePrinter().print(tree.getRoot(), new PrintStream(new FileOutputStream("tree.txt")));
+      } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    }).start();
+
+
+    RiskAction bestAction = tree.getBestAction();
 
     log.debugf("Found best move: %s", bestAction.toString());
 
