@@ -5,6 +5,7 @@ import at.ac.tuwien.ifs.sge.agent.GameAgent;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.RandomSelectionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.UCB1SelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
 import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
@@ -36,7 +37,8 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
     super.setTimers(computationTime, timeUnit); //Makes sure shouldStopComputation() works
 
     MCTSTree<Risk, RiskAction> tree = new MCTSTree<>(game,
-      new RandomSelectionStrategy<>(),
+      new UCB1SelectionStrategy<>(),
+      // new RandomSelectionStrategy<>(),
       new RandomExpansionStrategy(),
       new RandomSimulationStrategy(),
       playerId);

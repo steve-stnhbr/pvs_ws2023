@@ -1,5 +1,6 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo;
 
+import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import hu.webarticum.treeprinter.TreeNode;
 
 import java.util.ArrayList;
@@ -64,6 +65,22 @@ public class MCTSNode<T, A> implements TreeNode {
 
   public double getAverageUtility() {
     return utility / visits;
+  }
+
+  /**
+   * Given an action the child node of the current node is returned if it has the given action.
+   *
+   * @param action the action which the child is returned for
+   * @return the child which has the wanted action
+   */
+  public MCTSNode<T,A> getChildForAction(RiskAction action) {
+
+    for (MCTSNode<T,A> child : this.children) {
+      if (child.action.equals(action)) {
+        return child;
+      }
+    }
+    return null;
   }
 
   public int getVisits() {
