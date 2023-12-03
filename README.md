@@ -7,7 +7,11 @@ This is an agent for Risk game.
 ```
 gradle playAlphaBetaMatch
 ```
-This wil start a match between the programmed agent and the AlphaBetaAgent provided by the course.
+This will start a match between the programmed agent and the AlphaBetaAgent provided by the course.
+This command is available for all agents that are located in the game/agents folder. Just replace the name of the agent without the file ending in the command.
+```
+gradle play<AgentName>Match
+```
 
 ## Code
 ### MCTSTree
