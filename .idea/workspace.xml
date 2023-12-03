@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="db886a83-3f36-4f40-8b9b-c72564ff3e5d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/agents/RiskAgent-1.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game/agents/RiskAgent.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/agents/sge-alphabetaagent-1.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game/agents/alphabetaagent.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/agents/sge-mctsagent-1.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game/agents/mctsagent.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/agents/sge-randomagent-1.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game/agents/randomagent.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tree.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tree.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -148,7 +144,7 @@
       <updated>1701186275000</updated>
       <workItem from="1701186277149" duration="4103000" />
       <workItem from="1701506411740" duration="19760000" />
-      <workItem from="1701529595331" duration="4518000" />
+      <workItem from="1701529595331" duration="5957000" />
     </task>
     <servers />
   </component>

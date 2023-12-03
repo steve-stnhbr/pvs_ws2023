@@ -31,7 +31,8 @@ jar {
 def agents = fileTree('game/agents').include('*.jar').collect { it.getName()}
 
 agents.each { agent ->
-    tasks.register("play${agent}Match", JavaExec) {
+    def agentName = agent.substring(0, agent.indexOf('.'))
+    tasks.register("play${agentName}Match", JavaExec) {
         dependsOn 'build'
         description = 'Build the application and execute another JAR file with arguments'
         classpath = files("game/sge-1.0.2-exe.jar")
