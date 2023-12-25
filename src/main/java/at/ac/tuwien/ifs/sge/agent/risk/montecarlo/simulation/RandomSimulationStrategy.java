@@ -6,6 +6,7 @@ import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskAction> {
     public RandomSimulationStrategy() {
@@ -13,8 +14,10 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
     }
 
     @Override
-    public void simulate(MCTSNode<Risk, RiskAction> node, long timeout) {
+    public List<RiskAction> simulate(MCTSNode<Risk, RiskAction> node, long timeout) {
         Risk risk = node.getState();
+
+        List<RiskAction> actionList = Lists.newArrayList();
 
         long startTime = System.nanoTime();
         while (!risk.isGameOver() && System.nanoTime() - startTime <= timeout) {
@@ -30,9 +33,11 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
               .findFirst()
               .orElseThrow(() -> new RuntimeException("No possible actions."));
             risk = (Risk) risk.doAction(action);
+            actionList.add(action);
         }
 
         node.setUtility(risk.getPlayerUtilityWeight(node.getPlayerId()));
+        return actionList;
     }
 
 }

@@ -1,22 +1,27 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo;
 
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
+import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class MCTSTree<T, A> {
     private MCTSNode<T, A> root;
     private final MCTSSelectionStrategy<T, A> selectionStrategy;
     private final MCTSExpansionStrategy<T, A> expansionStrategy;
     private final MCTSSimulationStrategy<T, A> simulationStrategy;
+    private final MCTSBackpropagationStrategy<T, A> backpropagationStrategy;
     private final int playerId;
 
-    public MCTSTree(T rootContent, MCTSSelectionStrategy<T, A> selectionStrategy, MCTSExpansionStrategy<T, A> expansionStrategy, MCTSSimulationStrategy<T, A> simulationStrategy, int playerId) {
+    public MCTSTree(T rootContent, MCTSSelectionStrategy<T, A> selectionStrategy, MCTSExpansionStrategy<T, A> expansionStrategy, MCTSSimulationStrategy<T, A> simulationStrategy, MCTSBackpropagationStrategy<T, A> backpropagationStrategy, int playerId) {
         this.selectionStrategy = selectionStrategy;
         this.expansionStrategy = expansionStrategy;
         this.simulationStrategy = simulationStrategy;
+        this.backpropagationStrategy = backpropagationStrategy;
         this.root = new MCTSNode<>(rootContent, null, null, playerId);
         this.playerId = playerId;
     }
@@ -35,11 +40,10 @@ public class MCTSTree<T, A> {
             //System.out.println("Expanded node: " + node);
         }
         // Simulation Stage
-        simulationStrategy.simulate(node, timeout / simulationSteps);
+        List<A> actions = simulationStrategy.simulate(node, timeout / simulationSteps);
         //System.out.println("Simulated node: " + node);
         // Backpropagation Stage
-        node.backpropagate(null);
-        //System.out.println("ROOT: " + root);
+        backpropagationStrategy.backpropagate(node, actions);
     }
 
     /**

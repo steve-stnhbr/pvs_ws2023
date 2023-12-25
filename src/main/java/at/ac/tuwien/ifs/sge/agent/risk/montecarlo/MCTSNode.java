@@ -29,20 +29,6 @@ public class MCTSNode<T, A> implements TreeNode {
     this.children = new ArrayList<>();
   }
 
-  /**
-   * This method backpropagates the utility of a child node to the parent node.
-   * @param child
-   */
-  public void backpropagate(MCTSNode<T, A> child) {
-    visits++;
-    if (child != null) {
-      utility += child.getUtility();
-    }
-    if (parent != null) {
-      parent.backpropagate(this);
-    }
-  }
-
   public MCTSNode<T, A> getParent() {
     return parent;
   }

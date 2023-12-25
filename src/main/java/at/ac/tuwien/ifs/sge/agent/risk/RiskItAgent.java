@@ -3,14 +3,13 @@ package at.ac.tuwien.ifs.sge.agent.risk;
 import at.ac.tuwien.ifs.sge.agent.AbstractGameAgent;
 import at.ac.tuwien.ifs.sge.agent.GameAgent;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.BasicBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
-import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.RandomSelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.UCB1SelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
 import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
-import at.ac.tuwien.ifs.sge.game.risk.board.RiskBoard;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 
 import java.io.FileNotFoundException;
@@ -42,6 +41,7 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
       // new RandomSelectionStrategy<>(),
       new RandomExpansionStrategy(),
       new RandomSimulationStrategy(),
+      new BasicBackpropagationStrategy(),
       playerId);
     while (!shouldStopComputation()) {
       tree.simulate(SIMULATION_STEPS, TIMEOUT);

@@ -2,6 +2,8 @@ package at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation;
 
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSNode;
 
+import java.util.List;
+
 public abstract class MCTSSimulationStrategy<T, A> {
   public MCTSSimulationStrategy() {
   }
@@ -12,5 +14,5 @@ public abstract class MCTSSimulationStrategy<T, A> {
    * @param node The node to run the simulation from
    * @param timeout The time in nanoseconds the simulation should run
    */
-    public abstract void simulate(MCTSNode<T, A> node, long timeout);
+    public abstract List<A> simulate(MCTSNode<T, A> node, long timeout);
 }
