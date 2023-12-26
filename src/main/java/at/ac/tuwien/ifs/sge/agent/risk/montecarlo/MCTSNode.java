@@ -1,18 +1,24 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo;
 
+import at.ac.tuwien.ifs.sge.agent.risk.util.TreePrinter;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import hu.webarticum.treeprinter.TreeNode;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MCTSNode<T, A> implements TreeNode {
+public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
+  private final Map<String, Object> properties;
   private MCTSNode<T, A> parent;
   private List<MCTSNode<T, A>> children;
   private int visits;
   private double utility;
   private int playerId;
+
 
   private T state;
   private final A action;
@@ -27,6 +33,7 @@ public class MCTSNode<T, A> implements TreeNode {
     this.playerId = playerId;
     this.action = action;
     this.children = new ArrayList<>();
+    this.properties = new HashMap<>();
   }
 
   public MCTSNode<T, A> getParent() {
@@ -39,6 +46,11 @@ public class MCTSNode<T, A> implements TreeNode {
 
   public List<MCTSNode<T, A>> getChildren() {
     return children;
+  }
+
+  @Override
+  public String getLabel() {
+    return visits + " " + utility;
   }
 
   public void setChildren(List<MCTSNode<T, A>> children) {
@@ -109,6 +121,21 @@ public class MCTSNode<T, A> implements TreeNode {
     return action;
   }
 
+  public void setProperty(String key, Object value) {
+      properties.put(key, value);
+  }
+
+  public Object getProperty(String key) {
+      return properties.get(key);
+  }
+
+  public String getStringProperty(String key) {
+      return (String) properties.get(key);
+  }
+
+  public int getIntProperty(String key) {
+      return (int) properties.get(key);
+  }
 
   /**
    * Implements TreeNode interface: This method returns the content of the node. It will be displayed in the tree-visualization.

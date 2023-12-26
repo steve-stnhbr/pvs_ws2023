@@ -1,6 +1,7 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection;
 
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSNode;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 
@@ -20,7 +21,7 @@ public class ThompsonSamplingStrategy<T, A> extends MCTSSelectionStrategy<Risk, 
     }
 
     @Override
-    public MCTSNode<Risk, RiskAction> select(MCTSNode<Risk, RiskAction> root) {
+    public MCTSNode<Risk, RiskAction> select(MCTSNode<Risk, RiskAction> root, MCTSTree<Risk, RiskAction> tree) {
         Risk risk = root.getState();
         Set<RiskAction> possibleActions = risk.getPossibleActions();
         this.armCount = possibleActions.size();

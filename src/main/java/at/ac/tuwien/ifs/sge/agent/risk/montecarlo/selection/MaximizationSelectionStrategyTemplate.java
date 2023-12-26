@@ -1,8 +1,10 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection;
 
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSNode;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -22,7 +24,7 @@ public abstract class MaximizationSelectionStrategyTemplate extends MCTSSelectio
    * @return The selected node.
    */
   @Override
-  public MCTSNode<Risk, RiskAction> select(MCTSNode<Risk, RiskAction> root) {
+  public MCTSNode<Risk, RiskAction> select(MCTSNode<Risk, RiskAction> root, MCTSTree<Risk, RiskAction> tree) {
     while (!root.isLeaf()) {
       root = selectChild(root.getChildren());
     }

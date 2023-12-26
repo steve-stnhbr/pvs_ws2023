@@ -4,12 +4,16 @@ import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropag
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
-import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
+import at.ac.tuwien.ifs.sge.util.pair.ImmutablePair;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-public class MCTSTree<T, A> {
+public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     private MCTSNode<T, A> root;
     private final MCTSSelectionStrategy<T, A> selectionStrategy;
     private final MCTSExpansionStrategy<T, A> expansionStrategy;
@@ -40,10 +44,12 @@ public class MCTSTree<T, A> {
             //System.out.println("Expanded node: " + node);
         }
         // Simulation Stage
-        List<A> actions = simulationStrategy.simulate(node, timeout / simulationSteps);
+        ImmutablePair<List<A>, Double> simulated = simulationStrategy.simulate(node, timeout / simulationSteps, this);
+        List<A> actions = simulated.getA();
+        double utility = simulated.getB();
         //System.out.println("Simulated node: " + node);
         // Backpropagation Stage
-        backpropagationStrategy.backpropagate(node, actions);
+        backpropagationStrategy.backpropagate(node, actions, utility, this);
     }
 
     /**
@@ -58,4 +64,72 @@ public class MCTSTree<T, A> {
           .orElse(null);
     }
 
+    @Override
+    public Iterator<T, A> iterator() {
+        return new Iterator<>(root);
+    }
+
+    public Stream<MCTSNode<T, A>> stream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
+
+    public Spliterator<MCTSNode<T, A>> spliterator() {
+        return new Spliterator<>() {
+            @Override
+            public boolean tryAdvance(java.util.function.Consumer<? super MCTSNode<T, A>> action) {
+                if (root == null) {
+                    return false;
+                }
+                action.accept(root);
+                return true;
+            }
+
+            @Override
+            public Spliterator<MCTSNode<T, A>> trySplit() {
+                return null;
+            }
+
+            @Override
+            public long estimateSize() {
+                return Long.MAX_VALUE;
+            }
+
+            @Override
+            public int characteristics() {
+                return Spliterator.DISTINCT | Spliterator.NONNULL | Spliterator.ORDERED;
+            }
+        };
+    }
+
+    public static class Iterator<T, A> implements java.util.Iterator<MCTSNode<T, A>> {
+        private MCTSNode<T, A> current;
+
+        public Iterator(MCTSNode<T, A> root) {
+            this.current = root;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public MCTSNode<T, A> next() {
+            // inorder traversal of the unbound tree
+            MCTSNode<T, A> next = current;
+            if (!current.getChildren().isEmpty()) {
+                current = current.getChildren().get(0);
+            } else {
+                while (current.getParent() != null && current.getParent().getChildren().indexOf(current) == current.getParent().getChildren().size() - 1) {
+                    current = current.getParent();
+                }
+                if (current.getParent() == null) {
+                    current = null;
+                } else {
+                    current = current.getParent().getChildren().get(current.getParent().getChildren().indexOf(current) + 1);
+                }
+            }
+            return next;
+        }
+    }
 }

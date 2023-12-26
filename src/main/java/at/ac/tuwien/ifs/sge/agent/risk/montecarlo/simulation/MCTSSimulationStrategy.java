@@ -1,6 +1,8 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation;
 
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSNode;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
+import at.ac.tuwien.ifs.sge.util.pair.ImmutablePair;
 
 import java.util.List;
 
@@ -14,5 +16,5 @@ public abstract class MCTSSimulationStrategy<T, A> {
    * @param node The node to run the simulation from
    * @param timeout The time in nanoseconds the simulation should run
    */
-    public abstract List<A> simulate(MCTSNode<T, A> node, long timeout);
+    public abstract ImmutablePair<List<A>, Double> simulate(MCTSNode<T, A> node, long timeout, MCTSTree<T, A> tree);
 }

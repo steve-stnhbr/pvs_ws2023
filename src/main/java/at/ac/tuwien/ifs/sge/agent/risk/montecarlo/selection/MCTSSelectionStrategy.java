@@ -1,6 +1,7 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection;
 
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSNode;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 
 public abstract class MCTSSelectionStrategy<T, A> {
     public MCTSSelectionStrategy() {
@@ -11,5 +12,5 @@ public abstract class MCTSSelectionStrategy<T, A> {
      * @param root The root of the tree
      * @return The node to run the simulation on
      */
-    public abstract MCTSNode<T, A> select(MCTSNode<T, A> root);
+    public abstract MCTSNode<T, A> select(MCTSNode<T, A> root, MCTSTree<T, A> tree);
 }

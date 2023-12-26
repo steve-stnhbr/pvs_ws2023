@@ -6,11 +6,17 @@ plugins {
 repositories {
     jcenter()
 }
+
+
 dependencies {
     implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge', version: '1.0.0'
     implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge-risk', version: '1.0.0'
     implementation group: 'hu.webarticum', name: 'tree-printer', version: '2.1.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'org.jgrapht:jgrapht-core:1.5.2'
+    implementation 'org.jgrapht:jgrapht-ext:1.5.2'
+    implementation 'org.jgrapht:jgrapht-io:1.5.2'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 java {
@@ -19,6 +25,7 @@ java {
 }
 
 jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
@@ -38,7 +45,7 @@ agents.each { agent ->
         description = 'Build the application and execute another JAR file with arguments'
         classpath = files("game/sge-1.0.2-exe.jar")
         jvmArgs '-Xmx2g'
-        args 'match', 'game/sge-risk-1.0.2-exe.jar', "game/agents/$agent", 'build/libs/RiskItForTheBiscuit.jar', '-c', '3000', '--time-unit=MILLISECONDS'
+        args 'match', 'game/sge-risk-1.0.2-exe.jar', "game/agents/$agent", 'build/libs/RiskItForTheBiscuit.jar', '-c', '30000', '--time-unit=MILLISECONDS'
     }
 }
 

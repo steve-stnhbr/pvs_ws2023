@@ -7,13 +7,19 @@ import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.BasicBackpropa
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.UCB1SelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.util.FireAndForget;
+import at.ac.tuwien.ifs.sge.agent.risk.util.TreePrinter;
 import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.nio.dot.DOTExporter;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
@@ -47,14 +53,15 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
       tree.simulate(SIMULATION_STEPS, TIMEOUT);
     }
 
-    new Thread(() -> {
+    new FireAndForget(() -> {
       try {
-        new TraditionalTreePrinter().print(tree.getRoot(), new PrintStream(new FileOutputStream("tree.txt")));
-      } catch (FileNotFoundException e) {
+        Graph<TreePrinter.TreeNode, DefaultEdge> g = TreePrinter.createTree(tree.getRoot());
+        //new DOTExporter().exportGraph(g, new PrintStream(new FileOutputStream("out/graph.dot"), true));
+        TreePrinter.drawGraph(g);
+      } catch (IOException e) {
         throw new RuntimeException(e);
       }
-    }).start();
-
+    }, true);
 
     RiskAction bestAction = tree.getBestAction();
 

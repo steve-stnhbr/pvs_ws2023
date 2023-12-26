@@ -1,8 +1,10 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation;
 
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSNode;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
+import at.ac.tuwien.ifs.sge.util.pair.ImmutablePair;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;
@@ -14,7 +16,7 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
     }
 
     @Override
-    public List<RiskAction> simulate(MCTSNode<Risk, RiskAction> node, long timeout) {
+    public ImmutablePair<List<RiskAction>, Double> simulate(MCTSNode<Risk, RiskAction> node, long timeout, MCTSTree<Risk, RiskAction> tree) {
         Risk risk = node.getState();
 
         List<RiskAction> actionList = Lists.newArrayList();
@@ -36,8 +38,8 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
             actionList.add(action);
         }
 
-        node.setUtility(risk.getPlayerUtilityWeight(node.getPlayerId()));
-        return actionList;
+        node.setUtility(risk.getUtilityValue(node.getPlayerId()));
+        return new ImmutablePair<>(actionList, risk.getUtilityValue(node.getPlayerId()));
     }
 
 }

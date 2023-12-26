@@ -1,6 +1,7 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation;
 
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSNode;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import org.checkerframework.checker.units.qual.A;
@@ -14,7 +15,7 @@ public class BasicBackpropagationStrategy extends MCTSBackpropagationStrategy<Ri
    * @param child
    */
   @Override
-  public void backpropagate(MCTSNode<Risk, RiskAction> leaf, List<RiskAction> actions) {
+  public void backpropagate(MCTSNode<Risk, RiskAction> leaf, List<RiskAction> actions, double utility, MCTSTree<Risk, RiskAction> tree) {
     MCTSNode<Risk, RiskAction> node = leaf;
     while (node != null) {
       node.setVisits(node.getVisits() + 1);
