@@ -106,11 +106,17 @@ public class RiskHasher {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T getFieldValue(Object obj, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+  public static <T> T getFieldValue(Object obj, String fieldName) {
     Class<?> riskBoardClass = obj.getClass();
-    Field field = riskBoardClass.getField(fieldName);
-    field.setAccessible(true);
-    return (T) field.get(obj);
+    try {
+      Field field = riskBoardClass.getDeclaredField(fieldName);
+      field.setAccessible(true);
+      return (T) field.get(obj);
+    } catch (NoSuchFieldException e) {
+      throw new IllegalStateException("Field " + fieldName + " not found in class " + riskBoardClass.getName());
+    } catch (IllegalAccessException e) {
+      throw new IllegalStateException("Field " + fieldName + " in class " + riskBoardClass.getName() + " not accessible");
+    }
   }
     private static float hashField(String fieldName, Object value) {
       // You may implement a custom hash function based on the field name and value
@@ -168,16 +174,24 @@ public class RiskHasher {
 
   @SuppressWarnings("unchecked")
   public static INDArray encodeBoard(RiskBoard board) {
-    int[] shape = {1, FIELD_NAMES.length};
+    long[] shape = {1, FIELD_NAMES.length};
     try (INDArray stateTensor = Nd4j.zeros(shape)) {
       for (int i = 0; i < FIELD_NAMES.length; i++) {
           String fieldName = FIELD_NAMES[i];
           Object fieldValue = getFieldValue(board, fieldName);
-          stateTensor.put(i, encodeElement(fieldValue));
+          var encoding = encodeElement(fieldValue);
+          var encodingShape = encoding.shape();
+          if (encodingShape.length > 0) {
+            shape = stateTensor.shape();
+            var newShape = new long[shape.length + encodingShape.length];
+            System.arraycopy(shape, 0, newShape, 0, shape.length);
+            System.arraycopy(encodingShape, 0, newShape, shape.length, encodingShape.length);
+            System.out.printf("Trying to reshape:%n\told: %s%n\tencoding: %s%n\tnew: %s%n", Arrays.toString(shape), Arrays.toString(encodingShape), Arrays.toString(newShape));
+            stateTensor.reshape(newShape);
+          }
+          stateTensor.put(i, encoding);
       }
         return stateTensor;
-    } catch (NoSuchFieldException | IllegalAccessException e) {
-      throw new RuntimeException(e);
     }
   }
 

@@ -36,7 +36,7 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
 
     public void simulate(int simulationSteps, long timeout) {
         // Selection Stage
-        MCTSNode<T, A> node = selectionStrategy.select(root);
+        MCTSNode<T, A> node = selectionStrategy.select(root, this);
         //System.out.println("Selected node: " + node);
         // Expansion Stage
         if (node.getVisits() != 0) {

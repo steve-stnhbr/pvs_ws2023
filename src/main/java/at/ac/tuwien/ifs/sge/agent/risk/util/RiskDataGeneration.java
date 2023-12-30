@@ -59,6 +59,7 @@ public class RiskDataGeneration {
         }
 
         double utility = risk.getUtilityValue(playerID);
+        System.out.println("Finished game with " + utility);
         states.forEach(state -> DatasetWriter.appendToHDF("data.h5", state, (float) utility));
       }
     };
@@ -97,7 +98,7 @@ public class RiskDataGeneration {
 
   public static void main(String[] args) {
     try {
-      new RiskDataGeneration().start(6);
+      new RiskDataGeneration().start(12);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
