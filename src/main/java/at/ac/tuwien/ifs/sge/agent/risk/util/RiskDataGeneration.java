@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.SplittableRandom;
 
 public class RiskDataGeneration {
-  private static final int MAX_ITERATIONS = 5000;
+  private static final int MAX_ITERATIONS = 10000;
 
   private static final SplittableRandom RANDOM = new SplittableRandom();
 
@@ -46,7 +46,7 @@ public class RiskDataGeneration {
 
     this.runnable = () -> {
       while (!Thread.currentThread().isInterrupted()) {
-        List<Tuple<INDArray, Float>> states = Lists.newArrayList();
+        List<Triple<INDArray, Float, Integer>> states = Lists.newArrayList();
         Risk risk = new Risk();
         int iterations = 0;
         while (!risk.isGameOver() && iterations < MAX_ITERATIONS) {
@@ -57,14 +57,14 @@ public class RiskDataGeneration {
           }
           risk = (Risk) risk.doAction(action);
           INDArray state = RiskHasher.Tensor.encodeBoard(risk.getBoard());
-          states.add(new Tuple<>(state, (float) risk.getHeuristicValue(playerID)));
+          states.add(new Triple<>(state, (float) risk.getHeuristicValue(playerID), action.hashCode()));
           iterations++;
         }
 
         double utility = risk.getUtilityValue(playerID);
         double heuristic = risk.getHeuristicValue(playerID);
         System.out.println("Finished game with " + utility);
-        states.forEach(state -> DatasetWriter.CSV.appendToCSV("out/data.csv", state.getA(), (float) utility, state.getB(), (float) heuristic));
+        states.forEach(state -> DatasetWriter.CSV.appendToCSV("out/data.csv", state.getA(), (float) utility, state.getB(), (float) heuristic,  state.getC()));
       }
     };
   }
