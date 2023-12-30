@@ -47,7 +47,7 @@ public class RiskDataGeneration {
         Risk risk = new Risk();
         int iterations = 0;
         while (!risk.isGameOver() && iterations < 1000) {
-          RiskAction action = selectActionRandom(risk);
+          RiskAction action = selectActionMaxHeuristic(risk);
           if (action == null) {
             risk = (Risk) risk.doAction();
             continue;
@@ -59,8 +59,9 @@ public class RiskDataGeneration {
         }
 
         double utility = risk.getUtilityValue(playerID);
+        double heuristic = risk.getHeuristicValue(playerID);
         System.out.println("Finished game with " + utility);
-        states.forEach(state -> DatasetWriter.appendToHDF("out/data.h5", state, (float) utility));
+        states.forEach(state -> DatasetWriter.CSV.appendToCSV("out/data.csv", state, (float) utility, (float) heuristic));
       }
     };
   }
