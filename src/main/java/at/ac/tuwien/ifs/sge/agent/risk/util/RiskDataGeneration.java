@@ -6,15 +6,18 @@ import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import com.google.common.collect.Lists;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.opencv.core.Mat;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.SplittableRandom;
 
 public class RiskDataGeneration {
+  private static final int MAX_ITERATIONS = 5000;
 
   private static final SplittableRandom RANDOM = new SplittableRandom();
 
@@ -43,25 +46,25 @@ public class RiskDataGeneration {
 
     this.runnable = () -> {
       while (!Thread.currentThread().isInterrupted()) {
-        List<INDArray> states = Lists.newArrayList();
+        List<Tuple<INDArray, Float>> states = Lists.newArrayList();
         Risk risk = new Risk();
         int iterations = 0;
-        while (!risk.isGameOver() && iterations < 1000) {
-          RiskAction action = selectActionMaxHeuristic(risk);
+        while (!risk.isGameOver() && iterations < MAX_ITERATIONS) {
+          RiskAction action = selectActionRandom(risk);
           if (action == null) {
             risk = (Risk) risk.doAction();
             continue;
           }
           risk = (Risk) risk.doAction(action);
           INDArray state = RiskHasher.Tensor.encodeBoard(risk.getBoard());
-          states.add(state);
+          states.add(new Tuple<>(state, (float) risk.getHeuristicValue(playerID)));
           iterations++;
         }
 
         double utility = risk.getUtilityValue(playerID);
         double heuristic = risk.getHeuristicValue(playerID);
         System.out.println("Finished game with " + utility);
-        states.forEach(state -> DatasetWriter.CSV.appendToCSV("out/data.csv", state, (float) utility, (float) heuristic));
+        states.forEach(state -> DatasetWriter.CSV.appendToCSV("out/data.csv", state.getA(), (float) utility, state.getB(), (float) heuristic));
       }
     };
   }
@@ -99,7 +102,7 @@ public class RiskDataGeneration {
 
   public static void main(String[] args) {
     try {
-      new RiskDataGeneration().start(1);
+      new RiskDataGeneration().start(12);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
