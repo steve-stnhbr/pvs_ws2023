@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.SplittableRandom;
 
 public class RiskDataGeneration {
-  private static final int MAX_ITERATIONS = 5000;
+  private static final int MAX_ITERATIONS = 10000;
 
   private static final SplittableRandom RANDOM = new SplittableRandom();
 
