@@ -38,8 +38,8 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
             actionList.add(action);
         }
 
-        node.setUtility(risk.getUtilityValue(node.getPlayerId()));
-        return new ImmutablePair<>(actionList, risk.getUtilityValue(node.getPlayerId()));
+        node.setUtility(risk.getHeuristicValue(node.getPlayerId()));
+        return new ImmutablePair<>(actionList, risk.getHeuristicValue(node.getPlayerId()));
     }
 
 }

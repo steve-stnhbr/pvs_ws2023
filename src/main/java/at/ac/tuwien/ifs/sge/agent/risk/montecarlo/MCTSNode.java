@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
+  public static final Map<RiskAction, Double> actionProbabilities = new HashMap<>();
   private final Map<String, Object> properties;
   private MCTSNode<T, A> parent;
   private List<MCTSNode<T, A>> children;

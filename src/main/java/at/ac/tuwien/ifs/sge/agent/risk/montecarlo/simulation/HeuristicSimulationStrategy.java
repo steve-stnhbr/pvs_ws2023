@@ -13,7 +13,6 @@ import java.util.List;
 
 public class HeuristicSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskAction> {
 
-
   @Override
   public ImmutablePair<List<RiskAction>, Double> simulate(MCTSNode<Risk, RiskAction> node, long timeout, MCTSTree<Risk, RiskAction> tree) {
     Risk risk = node.getState();
@@ -37,8 +36,10 @@ public class HeuristicSimulationStrategy extends MCTSSimulationStrategy<Risk, Ri
       actionList.add(action);
     }
 
-    node.setUtility(risk.getUtilityValue(node.getPlayerId()));
-    node.setProperty("lastUtility", risk.getUtilityValue(node.getPlayerId()));
-    return new ImmutablePair<>(actionList, risk.getUtilityValue(node.getPlayerId()));
+    double utility = risk.getHeuristicValue(node.getPlayerId());
+
+    node.setUtility(utility);
+    node.setProperty("lastUtility", utility);
+    return new ImmutablePair<>(actionList, utility);
   }
 }

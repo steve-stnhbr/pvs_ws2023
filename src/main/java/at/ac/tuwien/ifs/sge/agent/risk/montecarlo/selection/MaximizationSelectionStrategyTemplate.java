@@ -26,7 +26,7 @@ public abstract class MaximizationSelectionStrategyTemplate extends MCTSSelectio
   @Override
   public MCTSNode<Risk, RiskAction> select(MCTSNode<Risk, RiskAction> root, MCTSTree<Risk, RiskAction> tree) {
     while (!root.isLeaf()) {
-      root = selectChild(root.getChildren());
+      root = selectChild(root.getChildren(), tree);
     }
     return root;
   }
@@ -36,10 +36,10 @@ public abstract class MaximizationSelectionStrategyTemplate extends MCTSSelectio
    * @param children The children to select from.
    * @return The selected child.
    */
-  private MCTSNode<Risk, RiskAction> selectChild(Collection<MCTSNode<Risk, RiskAction>> children) {
+  private MCTSNode<Risk, RiskAction> selectChild(Collection<MCTSNode<Risk, RiskAction>> children, MCTSTree<Risk, RiskAction> tree) {
     return children
       .stream()
-      .map((node) -> new AbstractMap.SimpleEntry<>(calculateScore(node), node))
+      .map((node) -> new AbstractMap.SimpleEntry<>(calculateScore(node, tree), node))
       .max(Comparator.comparingDouble(AbstractMap.SimpleEntry::getKey))
       .orElseThrow(() -> new RuntimeException("No children found"))
       .getValue();
@@ -50,5 +50,5 @@ public abstract class MaximizationSelectionStrategyTemplate extends MCTSSelectio
    * @param node The node to calculate the score for.
    * @return The score for the node.
    */
-  public abstract double calculateScore(MCTSNode<Risk, RiskAction> node);
+  public abstract double calculateScore(MCTSNode<Risk, RiskAction> node, MCTSTree<Risk, RiskAction> tree);
 }

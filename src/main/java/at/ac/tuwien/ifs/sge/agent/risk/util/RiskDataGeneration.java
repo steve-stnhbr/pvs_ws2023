@@ -5,6 +5,7 @@ import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStr
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import com.google.common.collect.Lists;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,7 +25,6 @@ public class RiskDataGeneration {
   private final Runnable runnable;
   private final int playerID = 0;
 
-
   public RiskDataGeneration() throws FileNotFoundException {
     this(new RandomSimulationStrategy());
   }
@@ -33,7 +33,8 @@ public class RiskDataGeneration {
     this("out/data.csv", strategy);
   }
 
-  public RiskDataGeneration(String fileName, MCTSSimulationStrategy<Risk, RiskAction> strategy) throws FileNotFoundException {
+  public RiskDataGeneration(String fileName, MCTSSimulationStrategy<Risk, RiskAction> strategy)
+      throws FileNotFoundException {
     this(new PrintStream(new FileOutputStream(fileName), true), strategy);
   }
 
@@ -42,7 +43,7 @@ public class RiskDataGeneration {
 
     this.runnable = () -> {
       while (!Thread.currentThread().isInterrupted()) {
-        List<float[]> hashes = Lists.newArrayList();
+        List<INDArray> states = Lists.newArrayList();
         Risk risk = new Risk();
         int iterations = 0;
         while (!risk.isGameOver() && iterations < 50000) {
@@ -52,27 +53,24 @@ public class RiskDataGeneration {
             continue;
           }
           risk = (Risk) risk.doAction(action);
-          float[] hash = RiskHasher.calculateDCNNFeatures(risk.getBoard());
-          float[] arr = new float[hash.length + 1];
-          System.arraycopy(hash, 0, arr, 0, hash.length);
-          arr[hash.length - 1] = (float) risk.getUtilityValue(playerID);
-          hashes.add(arr);
+          INDArray state = RiskHasher.encodeBoard(risk.getBoard());
+          states.add(state);
           iterations++;
         }
-        var hash = hashes.get(hashes.size() - 1);
-        System.out.println("Finished game with " + hash[0] + ":" + hash[1]);
-        hashes.forEach(h -> out.print(h[0] + "," + h[1]));
+
+        double utility = risk.getUtilityValue(playerID);
+        states.forEach(state -> DatasetWriter.appendToHDF("data.h5", state, (float) utility));
       }
     };
   }
 
   private RiskAction selectActionRandom(Risk risk) {
-      // if the current player is -1, the game performs actions automatically
-      if (risk.getCurrentPlayer() < 0) {
-        return null;
-      }
-      // select a random action
-      return risk.getPossibleActions()
+    // if the current player is -1, the game performs actions automatically
+    if (risk.getCurrentPlayer() < 0) {
+      return null;
+    }
+    // select a random action
+    return risk.getPossibleActions()
         .stream()
         .skip(RANDOM.nextInt(risk.getPossibleActions().size()))
         .findFirst()
@@ -85,9 +83,9 @@ public class RiskDataGeneration {
       return null;
     }
     return risk.getPossibleActions()
-      .stream()
-      .max(Comparator.comparingDouble(a -> risk.doAction(a).getHeuristicValue(playerID)))
-      .orElseThrow(() -> new RuntimeException("No possible actions."));
+        .stream()
+        .max(Comparator.comparingDouble(a -> risk.doAction(a).getHeuristicValue(playerID)))
+        .orElseThrow(() -> new RuntimeException("No possible actions."));
   }
 
   public void start(int numThreads) {
@@ -96,7 +94,6 @@ public class RiskDataGeneration {
       thread.start();
     }
   }
-
 
   public static void main(String[] args) {
     try {
