@@ -42,17 +42,24 @@ public class DatasetWriter {
     // Open the HDF5 file
     IHDF5Writer writer = HDF5Factory.open(filePath);
 
-    // Get the current dimensions of the dataset
-    long[] currentDims = writer.object().getDimensions("/dataset");
-
-    // Create a new dimension array where the first dimension is incremented by 1
-    int[] newDims = {(int) currentDims[0] + 1, (int) gameState.length() + 1};
-
-    // Create a new dataset with the new dimensions
-    writer.float32().createMDArray("/dataset", newDims);
+    long[] currentDims = {};
+    try {
+      // Get the current dimensions of the dataset
+      currentDims = writer.object().getDimensions("/dataset");
+    } catch (Exception e) {
+      currentDims = new long[]{ 0L };
+    }
 
     // Convert the game state to a 1D array
     float[] gameStateArray = gameState.data().asFloat();
+
+    System.out.println("stateArray- length:" + gameStateArray.length);
+
+    // Create a new dimension array where the first dimension is incremented by 1
+    int[] newDims = {(int) currentDims[0] + 1, gameStateArray.length, 1};
+
+    // Create a new dataset with the new dimensions
+    writer.float32().createMDArray("/dataset", newDims);
 
     // Create a combined array with the game state and scalar value
     float[] combinedData = new float[gameStateArray.length + 1];

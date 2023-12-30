@@ -2,6 +2,7 @@ package at.ac.tuwien.ifs.sge.agent.risk.util;
 
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskBoard;
+import com.google.flatbuffers.FlatBufferBuilder;
 import org.checkerframework.checker.units.qual.K;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
@@ -221,34 +222,36 @@ public class RiskHasher {
   public static void main(String[] args) {
       Risk risk = new Risk();
       RiskBoard riskBoard = risk.getBoard();
-      System.out.println(calculateDCNNKey(riskBoard));
+      var encoding = Tensor.encodeBoard(riskBoard);
+      System.out.println("shape: " + Arrays.toString(encoding.shape()) + "Encoding: " + encoding);
     }
 
   public static class Tensor {
 
-    public INDArray encodeBoard(RiskBoard instance) {
+    public static INDArray encodeBoard(RiskBoard instance) {
       List<INDArray> tensors = new ArrayList<>();
 
       for (String fieldName : FIELD_NAMES) {
         try {
           Object fieldValue = getFieldValue(instance, fieldName);
-          tensors.add(encodeObject(fieldValue));
+          INDArray encoded = encodeObject(fieldValue);
+          tensors.add(encoded);
         } catch (Exception e) {
           e.printStackTrace();
         }
       }
 
-      return Nd4j.hstack(tensors.toArray(new INDArray[0]));
+      return aggregate(tensors);
     }
 
-    public INDArray encodeObject(Object object) {
+    public static INDArray encodeObject(Object object) {
       if (object instanceof Collection) {
         Collection<?> collection = (Collection<?>) object;
         List<INDArray> tensors = new ArrayList<>();
         for (Object element : collection) {
           tensors.add(encodeObject(element));
         }
-        return Nd4j.hstack(tensors.toArray(new INDArray[0]));
+        return aggregate(tensors);
       } else if (object instanceof Map) {
         Map<?, ?> map = (Map<?, ?>) object;
         List<INDArray> tensors = new ArrayList<>();
@@ -256,12 +259,23 @@ public class RiskHasher {
           tensors.add(encodeObject(entry.getKey()));
           tensors.add(encodeObject(entry.getValue()));
         }
-        return Nd4j.hstack(tensors.toArray(new INDArray[0]));
+        return aggregate(tensors);
       } else {
-        return Nd4j.scalar(object.hashCode());
+        return Nd4j.scalar(object == null ? 0 : object.hashCode());
       }
     }
 
+  }
+
+  private static INDArray aggregate(List<INDArray> tensors) {
+      return aggregate(tensors.toArray(new INDArray[0]));
+  }
+
+  private static INDArray aggregate(INDArray... tensors) {
+    if (tensors.length == 0) {
+      return Nd4j.scalar(0);
+    }
+    return Nd4j.concat(0, tensors);
   }
 
 }

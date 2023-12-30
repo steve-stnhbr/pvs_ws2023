@@ -46,21 +46,21 @@ public class RiskDataGeneration {
         List<INDArray> states = Lists.newArrayList();
         Risk risk = new Risk();
         int iterations = 0;
-        while (!risk.isGameOver() && iterations < 50000) {
+        while (!risk.isGameOver() && iterations < 1000) {
           RiskAction action = selectActionRandom(risk);
           if (action == null) {
             risk = (Risk) risk.doAction();
             continue;
           }
           risk = (Risk) risk.doAction(action);
-          INDArray state = RiskHasher.encodeBoard(risk.getBoard());
+          INDArray state = RiskHasher.Tensor.encodeBoard(risk.getBoard());
           states.add(state);
           iterations++;
         }
 
         double utility = risk.getUtilityValue(playerID);
         System.out.println("Finished game with " + utility);
-        states.forEach(state -> DatasetWriter.appendToHDF("data.h5", state, (float) utility));
+        states.forEach(state -> DatasetWriter.appendToHDF("out/data.h5", state, (float) utility));
       }
     };
   }
@@ -98,7 +98,7 @@ public class RiskDataGeneration {
 
   public static void main(String[] args) {
     try {
-      new RiskDataGeneration().start(12);
+      new RiskDataGeneration().start(1);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
