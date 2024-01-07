@@ -24,6 +24,7 @@ dependencies {
     implementation 'cisd:jhdf5:19.04.1'
     implementation 'org.deeplearning4j:deeplearning4j-core:' + dl4j_master_version
     implementation 'org.nd4j:nd4j-native-platform:' + dl4j_master_version
+
 }
 
 java {
