@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.SplittableRandom;
 
 public class RiskDataGeneration {
-  private static final int MAX_ITERATIONS = 10000;
+  private static final int MAX_ITERATIONS = 100000;
 
   private static final SplittableRandom RANDOM = new SplittableRandom();
 
@@ -45,11 +45,11 @@ public class RiskDataGeneration {
     this.out = out;
 
     this.runnable = () -> {
-      while (!Thread.currentThread().isInterrupted()) {
-        List<Tuple<INDArray, Float>> states = Lists.newArrayList();
+      outer: while (!Thread.currentThread().isInterrupted()) {
+        List<Triple<INDArray, Float, Integer>> states = Lists.newArrayList();
         Risk risk = new Risk();
         int iterations = 0;
-        while (!risk.isGameOver() && iterations < MAX_ITERATIONS) {
+        while (!risk.isGameOver()) {
           RiskAction action = selectActionRandom(risk);
           if (action == null) {
             risk = (Risk) risk.doAction();
@@ -57,14 +57,21 @@ public class RiskDataGeneration {
           }
           risk = (Risk) risk.doAction(action);
           INDArray state = RiskHasher.Tensor.encodeBoard(risk.getBoard());
-          states.add(new Tuple<>(state, (float) risk.getHeuristicValue(playerID)));
+          states.add(new Triple<>(state, (float) risk.getHeuristicValue(playerID), action.hashCode()));
+          if (iterations % 5000 == 0) {
+            System.out.println(Thread.currentThread().getName() + ": Iterations: " + iterations);
+          }
           iterations++;
+          if (iterations > MAX_ITERATIONS) {
+            System.out.println(Thread.currentThread().getName() + ": Reached limit, restarting");
+            continue outer;
+          }
         }
 
         double utility = risk.getUtilityValue(playerID);
         double heuristic = risk.getHeuristicValue(playerID);
-        System.out.println("Finished game with " + utility);
-        states.forEach(state -> DatasetWriter.CSV.appendToCSV("out/data.csv", state.getA(), (float) utility, state.getB(), (float) heuristic));
+        System.out.println(Thread.currentThread().getName() + ": Finished game with " + utility);
+        states.forEach(state -> DatasetWriter.CSV.appendToCSV("out/data.csv", state.getA(), (float) utility, state.getB(), (float) heuristic,  state.getC()));
       }
     };
   }
