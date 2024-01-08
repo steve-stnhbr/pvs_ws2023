@@ -3,6 +3,7 @@ package at.ac.tuwien.ifs.sge.agent.risk.util;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import com.google.common.primitives.Floats;
+import org.deeplearning4j.nn.modelimport.keras.KerasModel;
 import org.deeplearning4j.nn.modelimport.keras.KerasModelImport;
 import org.deeplearning4j.nn.modelimport.keras.exceptions.InvalidKerasConfigurationException;
 import org.deeplearning4j.nn.modelimport.keras.exceptions.UnsupportedKerasConfigurationException;
@@ -20,10 +21,12 @@ import java.util.stream.Collectors;
 public class DNNTest {
   private final MultiLayerNetwork valueNetwork, policyNetwork;
 
-  public DNNTest(String valueNetworkFileName, String policyNetworkFileName) {
+  public DNNTest(String valueNetworkStructureFileName, String valueNetworkWeightsFileName) {
     try {
-      String valueNetworkPath = new ClassPathResource(valueNetworkFileName).getFile().getPath();
-      valueNetwork = KerasModelImport.importKerasSequentialModelAndWeights(valueNetworkPath);
+      String valueNetworkPath = new ClassPathResource(valueNetworkStructureFileName).getFile().getPath();
+      String valueNetworkWeightsPath = new ClassPathResource(valueNetworkWeightsFileName).getFile().getPath();
+      valueNetwork = KerasModelImport.importKerasSequentialModelAndWeights(valueNetworkPath, valueNetworkWeightsPath);
+
       policyNetwork = null;
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -72,7 +75,7 @@ public class DNNTest {
   }
 
   public static void main(String[] args) {
-    DNNTest test = new DNNTest("value_net.h5", "value_net.h5");
+    DNNTest test = new DNNTest("model.json", "model.weights.h5");
     Risk risk = new Risk();
     System.out.println(test.predictValue(risk, 0));
   }
