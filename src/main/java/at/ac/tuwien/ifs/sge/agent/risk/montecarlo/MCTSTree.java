@@ -35,19 +35,17 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     }
 
     public void simulate(int simulationSteps, long timeout) {
+        long timePerStep = timeout / simulationSteps;
         // Selection Stage
         MCTSNode<T, A> node = selectionStrategy.select(root, this);
-        //System.out.println("Selected node: " + node);
         // Expansion Stage
         if (node.getVisits() != 0) {
             node = expansionStrategy.expand(node);
-            //System.out.println("Expanded node: " + node);
         }
         // Simulation Stage
-        ImmutablePair<List<A>, Double> simulated = simulationStrategy.simulate(node, timeout / simulationSteps, this);
+        ImmutablePair<List<A>, Double> simulated = simulationStrategy.simulate(node, timePerStep * 2, this);
         List<A> actions = simulated.getA();
         double utility = simulated.getB();
-        //System.out.println("Simulated node: " + node);
         // Backpropagation Stage
         backpropagationStrategy.backpropagate(node, actions, utility, this);
     }

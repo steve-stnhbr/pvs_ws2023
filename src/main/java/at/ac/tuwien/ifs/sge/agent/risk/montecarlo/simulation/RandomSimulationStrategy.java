@@ -9,8 +9,11 @@ import com.google.common.collect.Lists;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.SplittableRandom;
 
 public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskAction> {
+    private static final SplittableRandom random = new SplittableRandom();
+
     public RandomSimulationStrategy() {
         super();
     }
@@ -31,14 +34,14 @@ public class RandomSimulationStrategy extends MCTSSimulationStrategy<Risk, RiskA
             // select a random action
             RiskAction action = risk.getPossibleActions()
               .stream()
-              .skip((int) (Math.random() * risk.getPossibleActions().size()))
+              .skip(random.nextInt(risk.getPossibleActions().size()))
               .findFirst()
               .orElseThrow(() -> new RuntimeException("No possible actions."));
             risk = (Risk) risk.doAction(action);
             actionList.add(action);
         }
 
-        node.setUtility(risk.getHeuristicValue(node.getPlayerId()));
+        node.setUtility(risk.getUtilityValue(node.getPlayerId()));
         return new ImmutablePair<>(actionList, risk.getHeuristicValue(node.getPlayerId()));
     }
 
