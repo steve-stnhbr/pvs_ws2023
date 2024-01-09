@@ -44,7 +44,6 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
 
     MCTSTree<Risk, RiskAction> tree = new MCTSTree<>(game,
       new UCB1SelectionStrategy<>(),
-      // new RandomSelectionStrategy<>(),
       new RandomExpansionStrategy(),
       new RandomSimulationStrategy(),
       new BasicBackpropagationStrategy(),
