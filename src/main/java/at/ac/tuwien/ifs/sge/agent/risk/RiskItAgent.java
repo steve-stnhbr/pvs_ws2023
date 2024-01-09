@@ -54,8 +54,8 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
 
     RiskAction bestAction = tree.getBestAction();
 
+    System.out.println("> " + bestAction);
     log.debugf("Found best move: %s", bestAction.toString());
-    System.out.println("> " + bestAction.toString());
 
     return bestAction;
   }
