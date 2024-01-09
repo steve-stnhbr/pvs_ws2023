@@ -11,7 +11,7 @@ public class DatasetWriter {
 
     private final PrintWriter writer;
 
-    private CSV(String fileName) {
+    public CSV(String fileName) {
       try {
         writer = new PrintWriter(new FileWriter(fileName));
       } catch (IOException e) {

@@ -6,8 +6,8 @@ import at.ac.tuwien.ifs.sge.game.risk.board.RiskBoard;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskCard;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskTerritory;
 import at.ac.tuwien.ifs.sge.game.risk.mission.RiskMission;
-import org.bytedeco.opencv.presets.opencv_core;
-import org.datavec.api.writable.Text;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -154,13 +155,26 @@ public class RiskHasher {
     }
   }
 
+  private static float meanSquaredError(float[] array1, float[] array2) {
+    int length = array1.length;
+    float sumSquaredDifferences = 0;
+
+    for (int i = 0; i < length; i++) {
+      float difference = array1[i] - array2[i];
+      sumSquaredDifferences += difference * difference;
+    }
+
+    return sumSquaredDifferences / length;
+  }
+
   public enum Version {
     V1,
     V2
   }
 
   public static class CSV {
-    public static Version version = V1;
+    public static Version version = V2;
+
     public static String generateHeader() {
       String s = "isCurrentPlayer,";
       List<String> fields = new ArrayList<>(List.of(FIELD_NAMES));
@@ -204,7 +218,7 @@ public class RiskHasher {
               } else if (version == V2) {
                 int[] playerCards = new int[cardAmount * 2];
                 Map<Integer, List<RiskCard>> cards = getFieldValue(instance, fieldName);
-                for(int i = 0; i < 2; i++) {
+                for (int i = 0; i < 2; i++) {
                   List<RiskCard> cardsList = cards.get(i);
                   for (RiskCard riskCard : cardsList) {
                     if (riskCard.getCardType() < 1) {
@@ -243,7 +257,7 @@ public class RiskHasher {
               } else if (version == V2) {
                 fields.add(territories.values()
                   .stream()
-                  .map(t -> (t.getOccupantPlayerId() == playerID ? 1 : -1) * + t.getTroops())
+                  .map(t -> (t.getOccupantPlayerId() == playerID ? 1 : -1) * +t.getTroops())
                   .map(String::valueOf)
                   .collect(Collectors.joining(":"))
                 );
@@ -265,7 +279,7 @@ public class RiskHasher {
               } else {
                 list.add(ndr.get(playerID).toString());
                 list.addAll(IntStream.range(0, ndr.size())
-                  .filter(i-> i != playerID)
+                  .filter(i -> i != playerID)
                   .mapToObj(i -> -1 * ndr.get(i))
                   .map(String::valueOf)
                   .collect(Collectors.toList())
@@ -499,10 +513,10 @@ public class RiskHasher {
               } else if (version == V2) {
                 list.add(ndr.get(playerID).doubleValue());
                 list.addAll(IntStream.range(0, ndr.size())
-                    .filter(i-> i != playerID)
-                    .mapToObj(i -> -1 * ndr.get(i).doubleValue())
-                    .collect(Collectors.toList())
-                  );
+                  .filter(i -> i != playerID)
+                  .mapToObj(i -> -1 * ndr.get(i).doubleValue())
+                  .collect(Collectors.toList())
+                );
               }
               continue;
             case "reinforcedTerritories":
@@ -651,6 +665,385 @@ public class RiskHasher {
       }
     }
 
+    public static RiskAction decodeAction(double[] selectedAction, Risk risk) {
+      Map<RiskAction, float[]> possibleActions_enc = risk.getPossibleActions()
+        .stream()
+        .map(action -> new Tuple<>(action, RiskHasher.Scalar.encodeAction(action, risk)))
+        .map(tuple -> new Tuple<>(tuple.getA(), Floats.toArray(tuple.getB())))
+        .collect(Collectors.toMap(Tuple::getA, Tuple::getB));
+      float[] selectedActionFloat = Floats.toArray(Doubles.asList(selectedAction));
+      return possibleActions_enc.entrySet()
+        .stream()
+        // finding lowest difference between
+        .min((e1, e2) -> Float.compare(meanSquaredError(e1.getValue(), selectedActionFloat), meanSquaredError(e2.getValue(), selectedActionFloat)))
+        .map(Map.Entry::getKey)
+        .orElseThrow();
+    }
+
+  }
+  /*
+  public static class CSV_UNV {
+    public static String generateHeader() {
+      String s = "isCurrentPlayer,";
+      List<String> fields = new ArrayList<>(List.of(FIELD_NAMES));
+      fields.add("action");
+      fields.add("values");
+      return s + String.join(",", fields);
+    }
+
+
+    public static String encodeGame(Risk risk, int playerID) {
+      StringBuilder sb = new StringBuilder();
+      sb.append(risk.getCurrentPlayer() == playerID ? "1" : "0");
+      sb.append(",");
+      sb.append(encodeBoard(risk.getBoard(), playerID));
+      return sb.toString();
+    }
+
+    public static String encodeBoard(RiskBoard instance, int playerID) {
+      List<String> fields = new ArrayList<>();
+
+      for (String fieldName : FIELD_NAMES) {
+
+        try {
+          switch (fieldName) {
+            case "playerCards":
+              int cardAmount = 44;
+              int[] playerCards = new int[cardAmount];
+              Map<Integer, List<RiskCard>> cards = getFieldValue(instance, fieldName);
+              List<RiskCard> cardsList = cards.get(playerID);
+              for (RiskCard riskCard : cardsList) {
+                if (riskCard.getCardType() < 1) {
+                  playerCards[42 + riskCard.getTerritoryId() + 1] = 1;
+                  continue;
+                }
+                playerCards[riskCard.getTerritoryId()] = 1;
+              }
+
+              fields.add(Arrays
+                .stream(playerCards)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(":")));
+
+              continue;
+            case "phase":
+              Class<?> enumElement = Class.forName("at.ac.tuwien.ifs.sge.game.risk.board.RiskBoard$RiskPhase");
+              enumElement.getClassLoader().loadClass(enumElement.getName());
+              Object[] enumElements = enumElement.getEnumConstants();
+              Object phase = getFieldValue(instance, fieldName);
+              fields.add(Arrays
+                .stream(enumElements)
+                .map(el -> el.equals(phase) ? "1" : "0")
+                .collect(Collectors.joining(":")));
+              continue;
+            case "playerMissions":
+            case "territories":
+              Map<Integer, RiskTerritory> territories = getFieldValue(instance, "territories");
+              fields.add(territories.values()
+                .stream()
+                .map(t -> (t.getOccupantPlayerId() == playerID ? 1 : 0) + ":" + t.getTroops())
+                .collect(Collectors.joining(";"))
+              );
+              continue;
+            case "involvedTroopsInAttacks":
+              Map<Integer, Integer> attacks = getFieldValue(instance, "involvedTroopsInAttacks");
+              fields.add(IntStream.range(0, 42)
+                .map(i -> attacks.getOrDefault(i, 0))
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(":"))
+              );
+              continue;
+            case "nonDeployedReinforcements":
+              List<Integer> ndr = convertArrayToList(getFieldValue(instance, "nonDeployedReinforcements"));
+              fields.add(String.valueOf(ndr.get(playerID)));
+              continue;
+            case "reinforcedTerritories":
+              Set<Integer> reinforced = getFieldValue(instance, "reinforcedTerritories");
+              fields.add(IntStream.range(0, 42)
+                .mapToObj(i -> reinforced.contains(i) ? "1" : "0")
+                .collect(Collectors.joining(":"))
+              );
+              continue;
+            case "tradeInTerritories":
+              Set<Integer> trade = getFieldValue(instance, "tradeInTerritories");
+              fields.add(IntStream.range(0, 42)
+                .mapToObj(i -> trade.contains(i) ? "1" : "0")
+                .collect(Collectors.joining(":"))
+              );
+              continue;
+          }
+          Field field = getField(instance, fieldName);
+          Object value = field.get(instance);
+          if (field.getType().isArray()) {
+            value = convertArrayToList(value);
+          }
+          String encoded = encodeObject(value);
+          fields.add(encoded);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
+      return String.join(",", fields);
+    }
+
+    public static String encodeAction(RiskAction action, Risk risk) {
+      RiskBoard board = risk.getBoard();
+      int actionTypes = 7;
+      int[] actionEncoding = new int[actionTypes + 42 * 2 + 1];
+      int lastIndex = actionEncoding.length - 1;
+
+      if (risk.getCurrentPlayer() >= 0) {
+        if (RiskHasher.<Boolean>invoke(risk, "isInitialSelect")) {
+          // Code for isInitialSelect
+          actionEncoding[0] = 1;
+          actionEncoding[actionTypes + action.selected()] = 1;
+        } else if (RiskHasher.<Boolean>invoke(risk, "isInitialReinforce")) {
+          // Code for isInitialReinforce
+          actionEncoding[1] = 1;
+          actionEncoding[actionTypes + action.reinforcedId()] = 1;
+          actionEncoding[lastIndex] = 1;
+        } else if (board.hasToTradeInCards(risk.getCurrentPlayer())) {
+          // Code for hasToTradeInCards
+          actionEncoding[2] = 1;
+          actionEncoding[lastIndex] = action.getBonus();
+        } else if (RiskHasher.<Boolean>invoke(board, "isReinforcementPhase")) {
+          // Code for isReinforcementPhase
+          actionEncoding[3] = 1;
+          actionEncoding[actionTypes + action.reinforcedId()] = 1;
+          actionEncoding[lastIndex] = action.getBonus();
+        } else if (RiskHasher.<Boolean>invoke(board, "isAttackPhase")) {
+          // Code for isAttackPhase
+          actionEncoding[4] = 1;
+          actionEncoding[actionTypes + action.attackingId()] = 1;
+          actionEncoding[actionTypes + 42 + action.defendingId()] = 1;
+          actionEncoding[lastIndex] = action.getBonus();
+        } else if (RiskHasher.<Boolean>invoke(board, "isOccupyPhase")) {
+          // Code for isOccupyPhase
+          actionEncoding[5] = 1;
+          actionEncoding[actionTypes + RiskHasher.<Integer>getFieldValue(board, "attackingId")] = 1;
+          actionEncoding[actionTypes + RiskHasher.<Integer>getFieldValue(board, "defendingId")] = 1;
+          actionEncoding[lastIndex] = action.getBonus();
+        } else if (RiskHasher.<Boolean>invoke(board, "isFortifyPhase")) {
+          // Code for isFortifyPhase
+          actionEncoding[6] = 1;
+          actionEncoding[actionTypes + action.attackingId()] = 1;
+          actionEncoding[actionTypes + 42 + action.defendingId()] = 1;
+          actionEncoding[lastIndex] = action.getBonus();
+        }
+      }
+      return Arrays.stream(actionEncoding)
+        .mapToObj(String::valueOf)
+        .collect(Collectors.joining(":"));
+    }
+
+
+    public static String encodeObject(Object object) {
+      if (object instanceof Collection) {
+        Collection<?> collection = (Collection<?>) object;
+        StringBuilder sb = new StringBuilder();
+        for (Object element : collection) {
+          sb.append(encodeObject(element));
+          sb.append(";");
+        }
+        return sb.toString();
+      } else if (object instanceof Map) {
+        Map<?, ?> map = (Map<?, ?>) object;
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+          sb.append(encodeObject(entry.getKey()));
+          sb.append(":");
+          sb.append(encodeObject(entry.getValue()));
+          sb.append(";");
+        }
+        return sb.toString();
+      } else if (object instanceof RiskTerritory) {
+        RiskTerritory territory = (RiskTerritory) object;
+        int occupantPlayerId = getFieldValue(territory, "occupantPlayerId");
+        int troops = getFieldValue(territory, "troops");
+        return String.format("%s:%s", occupantPlayerId, troops);
+      } else if (object instanceof RiskCard) {
+        RiskCard card = (RiskCard) object;
+        return String.format("%s:%s", card.getCardType(), card.getTerritoryId());
+      } else if (object instanceof RiskMission) {
+        RiskMission mission = (RiskMission) object;
+        return String.format("%s;%s:%s", encodeObject(mission.getTargetIds()), mission.getRiskMissionType().ordinal(), mission.getOccupyingWith());
+      } else if (object instanceof Boolean) {
+        Boolean bool = (Boolean) object;
+        return bool ? "1" : "0";
+      } else {
+        return object == null ? "0" : String.valueOf(object.hashCode());
+      }
+    }
+
+  }
+
+  public static class BSON {
+    public static Document encodeBoard(RiskBoard instance) {
+      Document document = new Document();
+
+      for (String fieldName : FIELD_NAMES) {
+        try {
+          Object fieldValue = getFieldValue(instance, fieldName);
+          BsonValue encoded = encodeObject(fieldValue);
+          document.append(fieldName, encoded);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
+      return document;
+    }
+
+    public static BsonValue encodeObject(Object object) {
+      if (object instanceof Collection) {
+        Collection<?> collection = (Collection<?>) object;
+        BsonArray bsonArray = new BsonArray();
+        for (Object element : collection) {
+          bsonArray.add(encodeObject(element));
+        }
+        return bsonArray;
+      } else if (object instanceof Map) {
+        Map<?, ?> map = (Map<?, ?>) object;
+        BsonDocument document = new BsonDocument();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+          document.append(String.valueOf(encodeObject(entry.getKey()).asNumber().doubleValue()), encodeObject(entry.getValue()));
+        }
+        return document;
+      } else {
+        return new BsonInt32(object == null ? 0 : object.hashCode());
+      }
+    }
+
+
+  }
+  */
+
+  public static class NoReflection {
+    public static class CSV {
+
+      public static String getHeader() {
+        return "isCurrentPlayer,territories,playerCards,cardsLeft,tradeInBonus,tradeInTerritoryBonus,couldTradeInCards,fortifyableTroops,attackingTroops,mobileTroops";
+      }
+
+      public static String encodeGame(Risk risk, int currentPlayer) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(risk.getCurrentPlayer() == currentPlayer ? "1" : "0");
+        sb.append(",");
+        sb.append(encodeBoard(risk.getBoard(), currentPlayer, risk.getNumberOfPlayers()));
+        risk.getPossibleActions();
+        return sb.toString();
+      }
+
+      public static String encodeBoard(RiskBoard board, int currentPlayer, int numPlayers) {
+        String representation = "";
+        representation += encodeTerritories(board.getTerritories(), currentPlayer) + ",";
+        representation += encodeCards(board, currentPlayer, numPlayers) + ",";
+        representation += board.getCardsLeft() + ",";
+        representation += board.getTradeInBonus() + ",";
+        representation += board.getTradeInTerritoryBonus() + ",";
+        representation += board.couldTradeInCards(currentPlayer) ? "1" : "0";
+        representation += encodeFortifyableTroops(board, currentPlayer) + ",";
+        representation += encodeAttackingTroops(board, currentPlayer) + ",";
+        representation += encodeMobileTroops(board, currentPlayer) + ",";
+        return representation;
+      }
+
+      private static String encodeMobileTroops(RiskBoard board, int currentPlayer) {
+        int[] representation = new int[42];
+        for (int i = 0; i < 42; i++) {
+          representation[i] = board.getMobileTroops(i);
+        }
+        return Arrays
+          .stream(representation)
+          .boxed()
+          .map(String::valueOf)
+          .collect(Collectors.joining(":"));
+      }
+
+      private static String encodeAttackingTroops(RiskBoard board, int currentPlayer) {
+        int[] representation = new int[42];
+        for (int i = 0; i < 42; i++) {
+          representation[i] = board.getMaxAttackingTroops(i);
+        }
+        return Arrays
+          .stream(representation)
+          .boxed()
+          .map(String::valueOf)
+          .collect(Collectors.joining(":"));
+      }
+
+      public static String encodeTerritories(Map<Integer, RiskTerritory> map, int currentPlayer) {
+        Map<Integer, Integer> troopsOnTerritory = map.entrySet()
+          .stream()
+          .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue().getOccupantPlayerId() == currentPlayer ? e.getValue().getTroops() : -e.getValue().getTroops()))
+          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        int[] representation = new int[42];
+
+        for (Map.Entry<Integer, Integer> e : troopsOnTerritory.entrySet()) {
+          representation[e.getKey()] = e.getValue();
+        }
+
+        return Arrays
+          .stream(representation)
+          .boxed()
+          .map(String::valueOf)
+          .collect(Collectors.joining(":"));
+      }
+
+      public static String encodeCards(RiskBoard board, int currentPlayer, int numPlayers) {
+        StringBuilder cards = new StringBuilder();
+        for (int i = 0; i < numPlayers; i++) {
+          cards.append(encodeCards(board.getPlayerCards(i), i)).append(";");
+        }
+        return cards.toString();
+      }
+
+      public static String encodeCards(List<RiskCard> cards, int currentPlayer) {
+        // this representation omits the information of what cardtype we have except for wildcards
+        int[] representation = new int[44];
+        for (RiskCard card : cards) {
+          if (card.getCardType() < 1) {
+            representation[42 + card.getTerritoryId() + 1] = 1;
+            continue;
+          }
+          representation[card.getTerritoryId()] = 1;
+        }
+        return Arrays
+          .stream(representation)
+          .boxed()
+          .map(String::valueOf)
+          .collect(Collectors.joining(":"));
+      }
+
+      public static String encodeAction(RiskAction action) {
+        int[] actionEncoding = new int[42 * 2 + 1];
+
+        if (action.attackingId() > 0) {
+          actionEncoding[action.attackingId()] = 1;
+        }
+        if (action.defendingId() > 0) {
+          actionEncoding[42 + action.defendingId()] = 1;
+        }
+        actionEncoding[actionEncoding.length - 1] = action.getBonus();
+
+        return Arrays.stream(actionEncoding)
+          .mapToObj(String::valueOf)
+          .collect(Collectors.joining(":"));
+      }
+    }
+
+    public static String encodeFortifyableTroops(RiskBoard board, int currentPlayer) {
+      int[] representation = new int[42];
+      for (int i = 0; i < 42; i++) {
+        representation[i] = board.getFortifyableTroops(i);
+      }
+      return Arrays
+        .stream(representation)
+        .boxed()
+        .map(String::valueOf)
+        .collect(Collectors.joining(":"));
+    }
   }
 
 }
