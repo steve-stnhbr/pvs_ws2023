@@ -34,12 +34,11 @@ public class SelfPlay {
         while (!risk.isGameOver()) {
             RiskAction action = null;
             if (risk.getCurrentPlayer() == 0) {
+                System.out.println("Player 1's turn");
                 action = player1.computeNextAction(risk, 10000, TimeUnit.MILLISECONDS);
             } else if (risk.getCurrentPlayer() == 1) {
+                System.out.println("Player 2's turn");
                 action = player2.computeNextAction(risk, 10000, TimeUnit.MILLISECONDS);
-            } else {
-                risk.doAction();
-                continue;
             }
             System.out.println(DateTimeFormat.mediumDateTime().print(new Date().getTime()) + ": iteration done");
             Risk newState = (Risk) risk.doAction(action);
