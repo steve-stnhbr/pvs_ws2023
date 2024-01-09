@@ -1,148 +1,125 @@
 package at.ac.tuwien.ifs.sge.agent.risk.util;
-
-import ch.systemsx.cisd.base.mdarray.MDArray;
-import ch.systemsx.cisd.base.mdarray.MDFloatArray;
-import ch.systemsx.cisd.hdf5.HDF5Factory;
-import ch.systemsx.cisd.hdf5.IHDF5Writer;
-import org.nd4j.linalg.api.ndarray.INDArray;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class DatasetWriter {
-  public static class HDF5 {
-    public void appendToHDF_legacy(INDArray indArray, float... values) {
-      IHDF5Writer writer = HDF5Factory.open("data.h5");
-
-      float[] indArrayData = indArray.data().asFloat();
-
-      float[] combinedData = new float[indArrayData.length + values.length];
-      System.arraycopy(indArrayData, 0, combinedData, 0, indArrayData.length);
-      System.arraycopy(values, 0, combinedData, indArrayData.length, values.length);
-
-      long[] currentDims = writer.object().getDimensions("/dataset");
-      long[] newDims = {currentDims[0] + 1, combinedData.length};
-
-      /*
-      not working:
-      // Create a new dataset with the new dimensions
-      writer.float32().createMDArray("/dataset", newDims);
-
-      // Write the combined data to the new dataset
-      writer.float32().writeMDArray("/dataset", new MDFloatArray(combinedData, newDims));
-
-      long[] currentDims = writer.float32().getArraySize("/dataset");
-      long[] newDims = {currentDims[0] + 1, combinedData.length};
-
-      writer.float32().setExtendable("/dataset", 1, combinedData.length);
-      writer.float32().extend("/dataset", newDims);
-      writer.float32().writeArrayBlockWithOffset("/dataset", combinedData, 1, currentDims[0]);
-      */
-
-      writer.close();
-    }
-
-    public static void appendToHDF(String filePath, INDArray gameState, float scalarValue) {
-      // Open the HDF5 file
-      IHDF5Writer writer = HDF5Factory.open(filePath);
-
-      long[] currentDims = {};
-      try {
-        // Get the current dimensions of the dataset
-        currentDims = writer.object().getDimensions("/dataset");
-      } catch (Exception e) {
-        currentDims = new long[] {0L};
-      }
-
-      // Convert the game state to a 1D array
-      float[] gameStateArray = gameState.data().asFloat();
-
-      System.out.println("stateArray- length:" + gameStateArray.length);
-
-      // Create a new dimension array where the first dimension is incremented by 1
-      int[] newDims = {(int) currentDims[0] + 1, gameStateArray.length, 1};
-
-      // Create a new dataset with the new dimensions
-      writer.float32().createMDArray("/dataset", newDims);
-
-      // Create a combined array with the game state and scalar value
-      float[] combinedData = new float[gameStateArray.length + 1];
-      System.arraycopy(gameStateArray, 0, combinedData, 0, gameStateArray.length);
-
-      // Write the combined data to the new dataset
-      writer.float32().writeMDArray("/dataset", new MDFloatArray(combinedData, newDims));
-
-      // Close the HDF5 file
-      writer.close();
-    }
-
-    public static void appendToHDFArray(String filePath, INDArray gameState, float... values) {
-      // Open the HDF5 file
-      IHDF5Writer writer = HDF5Factory.open(filePath);
-
-      // Get the current dimensions of the dataset
-      long[] currentDims = writer.object().getDimensions("/dataset");
-
-      // Create a new dimension array where the first dimension is incremented by 1
-      // and the second dimension is the sum of the game state length and the values length
-      int[] newDims = {(int) currentDims[0] + 1, (int) gameState.length() + values.length};
-
-      // Create a new dataset with the new dimensions
-      writer.float32().createMDArray("/dataset", newDims);
-
-      // Convert the game state to a 1D array
-      float[] gameStateArray = gameState.data().asFloat();
-
-      // Create a combined array with the game state and scalar values
-      float[] combinedData = new float[gameStateArray.length + values.length];
-      System.arraycopy(gameStateArray, 0, combinedData, 0, gameStateArray.length);
-      System.arraycopy(values, 0, combinedData, gameStateArray.length, values.length);
-
-      // Write the combined data to the new dataset
-      writer.float32().writeMDArray("/dataset", new MDFloatArray(combinedData, newDims));
-
-      // Close the HDF5 file
-      writer.close();
-    }
-  }
-
   public static class CSV {
-    public static void appendToCSV(String fileName, INDArray gameState, float scalarValue) {
-      // Convert the game state to a 1D array
-      float[] gameStateArray = gameState.data().asFloat();
-      String gameStateString = IntStream.range(0, gameStateArray.length)
-          .mapToObj(i -> String.valueOf(gameStateArray[i]))
-          .collect(Collectors.joining(":"));
-      String scalarValueString = String.valueOf(scalarValue);
+    private static CSV instance;
 
-      try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
-        writer.println(gameStateString + "," + scalarValueString);
-        writer.flush();
+    private final PrintWriter writer;
+
+    private CSV(String fileName) {
+      try {
+        writer = new PrintWriter(new FileWriter(fileName));
       } catch (IOException e) {
-        System.err.println("Error writing to file: " + e.getMessage());
+        throw new RuntimeException(e);
       }
     }
 
-    public static void appendToCSV(String fileName, INDArray gameState, float... scalarValue) {
-      // Convert the game state to a 1D array
-      float[] gameStateArray = gameState.data().asFloat();
-      String gameStateString = IntStream.range(0, gameStateArray.length)
-        .mapToObj(i -> String.valueOf(gameStateArray[i]))
-        .collect(Collectors.joining(":"));
-      String scalarValueString = IntStream.range(0, scalarValue.length)
-          .mapToObj(i -> String.valueOf(scalarValue[i]))
-          .collect(Collectors.joining(":"));
+    public void appendToCSV(String gameState, float... scalarValue) {
+      store(gameState, scalarValue);
+    }
 
-      try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
-        writer.println(gameStateString + "," + scalarValueString);
-        writer.flush();
-      } catch (IOException e) {
-        System.err.println("Error writing to file: " + e.getMessage());
+    public void appendToCSV(String str) {
+      write(str);
+    }
+
+    private void store(String gameState, float[] scalarValue) {
+      String scalarValueString = IntStream.range(0, scalarValue.length)
+              .mapToObj(i -> String.valueOf(scalarValue[i]))
+              .collect(Collectors.joining(":"));
+      write(gameState + "," + scalarValueString);
+    }
+
+    private void write(String s) {
+      writer.println(s);
+      writer.flush();
+    }
+
+
+    public static CSV getInstance() {
+      if (instance == null)
+        instance = new CSV("out/data.csv");
+      return instance;
+    }
+
+  }
+  /*
+  public static class MongoDB {
+    private static final String SERVER_URL = "mongodb://217.160.218.60:27017";
+    private static MongoDB instance;
+
+    private final MongoClient client;
+    private final MongoDatabase db;
+    private final MongoCollection<Document> collection;
+
+    private MongoDB() {
+      System.out.println("Connecting to " + SERVER_URL);
+      client = MongoClients.create(SERVER_URL);
+      System.out.println("Connection successfull:" + preFlightChecks(client));
+      db = client.getDatabase("pvs");
+      collection = db.getCollection("pvs");
+    }
+
+    private static boolean preFlightChecks(MongoClient mongoClient) {
+      Document pingCommand = new Document("ping", 1);
+      Document response = mongoClient.getDatabase("admin").runCommand(pingCommand);
+      System.out.println("=> Print result of the '{ping: 1}' command.");
+      return response.getDouble("ok").equals(1.0);
+    }
+
+    public void store(INDArray gameState, float... values) {
+      float[] gameStateArray = gameState.data().asFloat();
+      Document doc = new Document();
+      doc.put("state", gameStateArray);
+      doc.put("values", values);
+      collection.insertOne(doc);
+    }
+
+    public void store(Document gameState, float... values) {
+      System.out.println("Storing " + gameState);
+      Document doc = new Document();
+      doc.put("state", gameState);
+      doc.put("values", IntStream.range(0, values.length)
+              .mapToObj(i -> new BsonDouble(values[i]))
+              .collect(Collectors.toList()));
+      collection.insertOne(doc);
+    }
+
+    public void storeAll(List<Triple<Document, Float, Integer>> triples, float... values) {
+      System.out.printf("Storing %d states%n", triples.size());
+      List<Document> documents = triples.stream()
+              .map(t -> {
+                Document doc = new Document();
+                doc.put("state", t.getA());
+                doc.put("values", IntStream.range(0, values.length + 2)
+                        .mapToObj(i -> {
+                          if (i == values.length) {
+                            return t.getB();
+                          } else if (i == values.length + 1) {
+                            return (float) t.getC();
+                          } else {
+                            return values[i];
+                          }
+                        })
+                        .map(BsonDouble::new)
+                        .collect(Collectors.toList()));
+                return doc;
+              })
+              .collect(Collectors.toList());
+
+      collection.insertMany(documents);
+    }
+
+    public static MongoDB getInstance() {
+      if (instance == null) {
+        instance = new MongoDB();
       }
+      return instance;
     }
   }
+   */
 }

@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/SelfPlay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/DatasetWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/DatasetWriter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +24,13 @@
         <projects_view />
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -65,7 +75,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.DNNTest">
+  <component name="RunManager" selected="Application.SelfPlay">
     <configuration name="DNNTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.util.DNNTest" />
       <module name="RiskItForTheBiscuit.main" />
@@ -92,8 +102,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SelfPlay" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.SelfPlay" />
+      <module name="RiskItForTheBiscuit.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SelfPlay" />
         <item itemvalue="Application.DNNTest" />
         <item itemvalue="Application.RiskDataGeneration" />
       </list>
@@ -111,7 +135,7 @@
       <workItem from="1704078564323" duration="2096000" />
       <workItem from="1704115167729" duration="114000" />
       <workItem from="1704324456706" duration="603000" />
-      <workItem from="1704737441387" duration="460000" />
+      <workItem from="1704737441387" duration="3890000" />
     </task>
     <servers />
   </component>

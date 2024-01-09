@@ -53,16 +53,6 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
       tree.simulate(SIMULATION_STEPS, TIMEOUT);
     }
 
-    new FireAndForget(() -> {
-      try {
-        Graph<TreePrinter.TreeNode, DefaultEdge> g = TreePrinter.createTree(tree.getRoot());
-        //new DOTExporter().exportGraph(g, new PrintStream(new FileOutputStream("out/graph.dot"), true));
-        TreePrinter.drawGraph(g);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }, true);
-
     RiskAction bestAction = tree.getBestAction();
 
     log.debugf("Found best move: %s", bestAction.toString());
