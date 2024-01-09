@@ -45,7 +45,11 @@ public class SelfPlay {
                 System.out.println("Player 2's turn");
                 action = player2.computeNextAction(risk, 10000, TimeUnit.MILLISECONDS);
             }
-            System.out.println(DateTimeFormat.mediumDateTime().print(new Date().getTime()) + ": iteration done");
+            System.out.println(DateTimeFormat.mediumDateTime().print(new Date().getTime()) + ": iteration #" + iterations + " done");
+            if (action == null) {
+                risk = (Risk) risk.doAction();
+                continue;
+            }
             Risk newState = (Risk) risk.doAction(action);
             String state_str = RiskHasher.CSV.encodeGame(risk, 0);
             String actionEncoding = RiskHasher.CSV.encodeAction(action, risk);
@@ -55,7 +59,6 @@ public class SelfPlay {
             risk = newState;
             iterations++;
         }
-
         record.forEach(t -> reflectionWriter.appendToCSV(t.getA(), t.getC(), (float) risk.getUtilityValue(0)));
         record.forEach(t -> noReflectionWriter.appendToCSV(t.getB(), t.getC(), (float) risk.getUtilityValue(0)));
 
