@@ -1016,7 +1016,8 @@ public class RiskHasher {
           .collect(Collectors.joining(":"));
       }
 
-      public static String encodeAction(RiskAction action) {
+
+      public static String encodeAction_old(RiskAction action) {
         int[] actionEncoding = new int[42 * 2 + 1];
 
         if (action.attackingId() > 0) {
@@ -1030,6 +1031,44 @@ public class RiskHasher {
         return Arrays.stream(actionEncoding)
           .mapToObj(String::valueOf)
           .collect(Collectors.joining(":"));
+      }
+
+      public static String encodeAction(RiskAction action) {
+        String actionString = action.toString();
+        int[] actionEncoding = new int[7 + 42 * 2 + 2];
+        if (actionString.equals("end phase")) {
+          // end phase
+          actionEncoding[0] = 1;
+        } else if (actionString.startsWith("0")) {
+          // occupy
+          actionEncoding[1] = 1;
+          actionEncoding[actionEncoding.length - 2] = action.getBonus();
+        } else if (actionString.contains("X")) {
+          // casualties
+          actionEncoding[2] = 1;
+          actionEncoding[actionEncoding.length -2] = action.attackerCasualties();
+          actionEncoding[actionEncoding.length -1] = action.defenderCasualties();
+        } else if (actionString.startsWith("B")) {
+          // bonus troops from cards
+          actionEncoding[3] = 1;
+          actionEncoding[actionEncoding.length -2] = action.getBonus();
+        } else if (actionString.startsWith("C[")) {
+          // play cards
+          actionEncoding[4] = 1;
+          //TODO: card encoding
+        } else if (actionString.startsWith("-(")) {
+          // reinforce
+          actionEncoding[5] = 1;
+          actionEncoding[7 + action.defendingId()] = 1;
+        } else if (actionString.startsWith("(")) {
+          actionEncoding[6] = 1;
+          actionEncoding[7 + action.attackingId()] = 1;
+          actionEncoding[7 + 42 + action.defendingId()] = 1;
+        }
+
+        return Arrays.stream(actionEncoding)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(":"));
       }
     }
 
