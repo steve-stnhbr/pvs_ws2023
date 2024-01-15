@@ -58,10 +58,12 @@ public class PerformanceTestCommand {
       extractScore(outputLines);
     } catch (IOException | InterruptedException e) {
       System.out.println("Exception caught");
+      /*
       if (process != null) {
         System.out.println("Destroying process");
         process.destroyForcibly();
       }
+      */
       e.printStackTrace();
     }
   }
@@ -74,33 +76,31 @@ public class PerformanceTestCommand {
   }
 
   private void extractScore(List<String> outputLines) {
-    int startIndex = Math.max(0, outputLines.size() - 20);
+    int startIndex = Math.max(0, outputLines.size() - 7);
     List<String> lines = outputLines.subList(startIndex, outputLines.size());
-    lines = lines.stream().filter(line -> line != null && !line.isEmpty() && !line.contains("-")).collect(Collectors.toList());
+    lines = lines.stream().filter(line -> line != null && line.contains("|") && !line.contains("+")).collect(Collectors.toList());
 
     String[] line1 = lines.get(0).replace(" ", "").replace("\t", "").split("\\|");
-    System.out.println(Arrays.toString(line1));
     String player1 = line1[2];
     String player2 = line1[3];
 
     String[] line2 = lines.get(1).replace(" ", "").replace("\t", "").split("\\|");
-    System.out.println(Arrays.toString(line2));
     String score1 = line2[2];
     String score2 = line2[3];
 
     String[] line3 = lines.get(2).replace(" ", "").replace("\t", "").split("\\|");
-    System.out.println(Arrays.toString(line3));
     String utility1 = line3[2];
     String utility2 = line3[3];
 
     csv.appendToCSV(String.format("%s,%s,%s,%s,%s,%s,%d", player1, player2, score1, score2, utility1, utility2, timeout));
-    System.out.printf("%s: Stored score %s:%s, %s:%s", Thread.currentThread().getName(), player1, score1, player2, score2);
+    System.out.printf("<---%s: Stored score %s:%s, %s:%s--->%n%n", Thread.currentThread().getName(), player1, score1, player2, score2);
   }
 
   public static void main(String[] args) {
     int numThreads = Runtime.getRuntime().availableProcessors() * 2;
-    int timeout = 10000;
+    int timeout = 100;
 
+    numThreads = 2;
 
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;

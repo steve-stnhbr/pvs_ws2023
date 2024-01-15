@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTestCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,17 +60,31 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Run",
     "git-widget-placeholder": "master",
     "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.SelfPlay">
+  <component name="RunManager" selected="Application.PerformanceTestCommand">
     <configuration name="DNNTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.util.DNNTest" />
       <module name="RiskItForTheBiscuit.main" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PerformanceTestCommand" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.PerformanceTestCommand" />
+      <module name="RiskItForTheBiscuit.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -104,12 +119,14 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.PerformanceTestCommand" />
       <item itemvalue="Application.SelfPlay" />
       <item itemvalue="Application.DNNTest" />
       <item itemvalue="Application.RiskDataGeneration" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PerformanceTestCommand" />
         <item itemvalue="Application.SelfPlay" />
         <item itemvalue="Application.DNNTest" />
         <item itemvalue="Application.RiskDataGeneration" />
