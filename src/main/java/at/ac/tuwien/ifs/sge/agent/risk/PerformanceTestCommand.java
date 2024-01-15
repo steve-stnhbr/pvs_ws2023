@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PerformanceTestCommand {
   private final static DatasetWriter.CSV csv = new DatasetWriter.CSV("out/performance.csv");
@@ -73,20 +74,21 @@ public class PerformanceTestCommand {
   }
 
   private void extractScore(List<String> outputLines) {
-    int startIndex = Math.max(0, outputLines.size() - 6);
+    int startIndex = Math.max(0, outputLines.size() - 20);
     List<String> lines = outputLines.subList(startIndex, outputLines.size());
+    lines = lines.stream().filter(line -> line != null && !line.isEmpty() && !line.contains("-")).collect(Collectors.toList());
 
-    String[] line1 = lines.get(1).replace(" ", "").replace("\t", "").split("\\|");
+    String[] line1 = lines.get(0).replace(" ", "").replace("\t", "").split("\\|");
     System.out.println(Arrays.toString(line1));
     String player1 = line1[2];
     String player2 = line1[3];
 
-    String[] line2 = lines.get(3).replace(" ", "").replace("\t", "").split("\\|");
+    String[] line2 = lines.get(1).replace(" ", "").replace("\t", "").split("\\|");
     System.out.println(Arrays.toString(line2));
     String score1 = line2[2];
     String score2 = line2[3];
 
-    String[] line3 = lines.get(4).replace(" ", "").replace("\t", "").split("\\|");
+    String[] line3 = lines.get(2).replace(" ", "").replace("\t", "").split("\\|");
     System.out.println(Arrays.toString(line3));
     String utility1 = line3[2];
     String utility2 = line3[3];
