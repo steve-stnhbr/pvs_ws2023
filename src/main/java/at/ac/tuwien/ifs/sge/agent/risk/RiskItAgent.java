@@ -4,8 +4,12 @@ import at.ac.tuwien.ifs.sge.agent.AbstractGameAgent;
 import at.ac.tuwien.ifs.sge.agent.GameAgent;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.BasicBackpropagationStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropagationStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.UCB1SelectionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.util.FireAndForget;
 import at.ac.tuwien.ifs.sge.agent.risk.util.TreePrinter;
@@ -13,6 +17,7 @@ import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
+import org.checkerframework.checker.units.qual.A;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.nio.dot.DOTExporter;
@@ -27,9 +32,22 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   GameAgent<Risk, RiskAction> {
   public static final int SIMULATION_STEPS = 45;
 
+  private final MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy;
+  private final MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy;
+  private final MCTSSimulationStrategy<Risk, RiskAction> simulationStrategy;
+  private final MCTSBackpropagationStrategy<Risk, RiskAction> backpropagationStrategy;
+
   public RiskItAgent(Logger log) {
-    super(3D / 4D, 5, TimeUnit.SECONDS, log);
     //Do some setup before the TOURNAMENT starts.
+    this(log, new UCB1SelectionStrategy<>(), new RandomExpansionStrategy(), new RandomSimulationStrategy(), new BasicBackpropagationStrategy());
+  }
+
+  public RiskItAgent(Logger log, MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy, MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy, MCTSSimulationStrategy<Risk, RiskAction> simulationStrategy, MCTSBackpropagationStrategy<Risk, RiskAction> backpropagationStrategy) {
+    super(3D / 4D, 5, TimeUnit.SECONDS, log);
+    this.selectionStrategy = selectionStrategy;
+    this.expansionStrategy = expansionStrategy;
+    this.simulationStrategy = simulationStrategy;
+    this.backpropagationStrategy = backpropagationStrategy;
   }
 
   @Override
@@ -43,10 +61,10 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
     super.setTimers(computationTime, timeUnit); //Makes sure shouldStopComputation() works
 
     MCTSTree<Risk, RiskAction> tree = new MCTSTree<>(game,
-      new UCB1SelectionStrategy<>(),
-      new RandomExpansionStrategy(),
-      new RandomSimulationStrategy(),
-      new BasicBackpropagationStrategy(),
+      this.selectionStrategy,
+      this.expansionStrategy,
+      this.simulationStrategy,
+      this.backpropagationStrategy,
       playerId);
     while (!shouldStopComputation()) {
       tree.simulate(SIMULATION_STEPS, TIMEOUT);
