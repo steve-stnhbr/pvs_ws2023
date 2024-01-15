@@ -18,7 +18,9 @@ public class PerformanceTestCommand {
     Process process = null;
     try {
       // Execute the command
-      process = new ProcessBuilder(command.split(" ")).start();
+      ProcessBuilder pb = new ProcessBuilder(command.split(" "));
+      pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+      process = pb.start();
 
       // Read the output
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
