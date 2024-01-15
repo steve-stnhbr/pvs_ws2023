@@ -111,7 +111,6 @@ public class PerformanceTestCommand {
         }
       }, "PerformanceTest #" + i);
       thread.start();
-      Runtime.getRuntime().addShutdownHook(new Thread(thread::interrupt));
       Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         // Interrupt the thread
         thread.interrupt();
@@ -121,6 +120,12 @@ public class PerformanceTestCommand {
           for (Process p : spawnedProcesses) {
             if (p != null) {
               System.out.println("Destroying process");
+              p.destroy();
+              try {
+                Thread.sleep(1000);
+              } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+              }
               p.destroyForcibly();
             }
           }
