@@ -92,6 +92,7 @@ public class PerformanceTestCommand {
         }
       }, "PerformanceTest #" + i);
       thread.start();
+      Runtime.getRuntime().addShutdownHook(new Thread(thread::interrupt));
     }
   }
 
