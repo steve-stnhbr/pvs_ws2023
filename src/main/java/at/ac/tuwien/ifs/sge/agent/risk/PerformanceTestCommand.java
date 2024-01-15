@@ -77,14 +77,17 @@ public class PerformanceTestCommand {
     List<String> lines = outputLines.subList(startIndex, outputLines.size());
 
     String[] line1 = lines.get(1).replace(" ", "").replace("\t", "").split("\\|");
+    System.out.println(Arrays.toString(line1));
     String player1 = line1[2];
     String player2 = line1[3];
 
     String[] line2 = lines.get(3).replace(" ", "").replace("\t", "").split("\\|");
+    System.out.println(Arrays.toString(line2));
     String score1 = line2[2];
     String score2 = line2[3];
 
     String[] line3 = lines.get(4).replace(" ", "").replace("\t", "").split("\\|");
+    System.out.println(Arrays.toString(line3));
     String utility1 = line3[2];
     String utility2 = line3[3];
 
