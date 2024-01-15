@@ -13,8 +13,8 @@ import java.util.List;
 public class PerformanceTestCommand {
   private final static DatasetWriter.CSV csv = new DatasetWriter.CSV("out/performance.csv");
 
-  public void run() {
-    String command = "java -jar game/sge-1.0.2-exe.jar match game/sge-risk-1.0.2-exe.jar game/agents/mctsagent.jar build/libs/RiskItForTheBiscuit.jar";
+  public void run(int timeout) {
+    String command = "java -jar game/sge-1.0.2-exe.jar match game/sge-risk-1.0.2-exe.jar game/agents/mctsagent.jar build/libs/RiskItForTheBiscuit.jar -c " + timeout + " --time-unit=MILLISECONDS";
     Process process = null;
     try {
       // Execute the command
@@ -47,8 +47,10 @@ public class PerformanceTestCommand {
       System.out.println("Exit value: " + process.exitValue());
       extractScore(outputLines);
     } catch (IOException | InterruptedException e) {
+      System.out.println("Exception caught");
       if (process != null) {
-        process.destroy();
+        System.out.println("Destroying process");
+        process.destroyForcibly();
       }
       e.printStackTrace();
     }
