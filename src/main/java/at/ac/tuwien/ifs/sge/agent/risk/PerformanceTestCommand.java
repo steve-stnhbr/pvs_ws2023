@@ -100,8 +100,6 @@ public class PerformanceTestCommand {
     int numThreads = Runtime.getRuntime().availableProcessors() * 2;
     int timeout = 100;
 
-    numThreads = 2;
-
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;
       Thread thread = new Thread(() -> {
