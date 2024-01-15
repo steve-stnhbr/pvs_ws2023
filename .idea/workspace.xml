@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="PerformanceTest" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="merge">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/PerformanceTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RiskItForTheBiscuit_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RiskItForTheBiscuit_jar2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTestCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/SelfPlay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/SelfPlay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/MCTSDeepLearningExpansionStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/DNNTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/RiskHasher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/RiskHasher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/TreePrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/TreePrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/model.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/model.weights.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/value_net.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/value_net.keras" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
@@ -59,28 +84,73 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.pvs_ws2023 [:SelfPlay.main()].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build pvs_ws2023.executor": "Run",
+    "Gradle.pvs_ws2023 [:PerformanceTest.main()].executor": "Run",
+    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Run",
+    "Gradle.pvs_ws2023 [:SelfPlay.main()].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "com.google.cloudcode.ide_session_index": "20240115_0000",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/game/agents",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2410314",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Application.SelfPlay">
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game/agents" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="at.ac.tuwien.ifs.sge.agent.risk" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.PerformanceTestCommand">
     <configuration name="DNNTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.util.DNNTest" />
       <module name="RiskItForTheBiscuit.main" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PerformanceTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.PerformanceTest" />
+      <module name="RiskItForTheBiscuit.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PerformanceTestCommand" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.PerformanceTestCommand" />
+      <module name="RiskItForTheBiscuit.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -115,12 +185,16 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.PerformanceTest" />
+      <item itemvalue="Application.PerformanceTestCommand" />
       <item itemvalue="Application.SelfPlay" />
       <item itemvalue="Application.DNNTest" />
       <item itemvalue="Application.RiskDataGeneration" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PerformanceTestCommand" />
+        <item itemvalue="Application.PerformanceTest" />
         <item itemvalue="Application.SelfPlay" />
         <item itemvalue="Application.DNNTest" />
         <item itemvalue="Application.RiskDataGeneration" />
@@ -140,6 +214,9 @@
       <workItem from="1704115167729" duration="114000" />
       <workItem from="1704324456706" duration="603000" />
       <workItem from="1704737441387" duration="6610000" />
+      <workItem from="1704888678356" duration="599000" />
+      <workItem from="1704892143557" duration="655000" />
+      <workItem from="1705325135900" duration="9644000" />
     </task>
     <task id="LOCAL-00001" summary="merge">
       <option name="closed" value="true" />
@@ -168,9 +245,9 @@
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java</url>
-          <line>55</line>
-          <option name="timeStamp" value="5" />
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/at.ac.tuwien.ifs.sge/sge/1.0.2/f4ca6a225fb81ec3264bee33b1ec4990944b292e/sge-1.0.2.jar!/at/ac/tuwien/ifs/sge/util/Util.class</url>
+          <line>162</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

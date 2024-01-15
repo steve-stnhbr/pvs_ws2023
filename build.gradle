@@ -8,23 +8,26 @@ repositories {
     maven {
         url 'https://maven.scijava.org/content/repositories/public/'
     }
+    flatDir {
+        dirs 'game/agents'
+    }
 }
 
 
 dependencies {
     def dl4j_master_version = '1.0.0-M2.1'
-    implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge', version: '1.0.0'
-    implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge-risk', version: '1.0.0'
+    implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge', version: '1.0.2'
+    implementation group: 'at.ac.tuwien.ifs.sge', name: 'sge-risk', version: '1.0.2'
     implementation group: 'hu.webarticum', name: 'tree-printer', version: '2.1.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.jgrapht:jgrapht-core:1.5.2'
     implementation 'org.jgrapht:jgrapht-ext:1.5.2'
     implementation 'org.jgrapht:jgrapht-io:1.5.2'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'cisd:jhdf5:19.04.1'
-    implementation 'org.deeplearning4j:deeplearning4j-core:' + dl4j_master_version
-    implementation 'org.nd4j:nd4j-native-platform:' + dl4j_master_version
-
+    //implementation 'cisd:jhdf5:19.04.1'
+    //implementation 'org.deeplearning4j:deeplearning4j-core:' + dl4j_master_version
+    //implementation 'org.nd4j:nd4j-native-platform:' + dl4j_master_version
+    implementation name: 'mctsagent'
 }
 
 java {
@@ -53,7 +56,7 @@ agents.each { agent ->
         description = 'Build the application and execute another JAR file with arguments'
         classpath = files("game/sge-1.0.2-exe.jar")
         jvmArgs '-Xmx2g'
-        args 'match', 'game/sge-risk-1.0.2-exe.jar', "game/agents/$agent", 'build/libs/RiskItForTheBiscuit.jar', '-c', '30000', '--time-unit=MILLISECONDS'
+        args 'match', 'game/sge-risk-1.0.2-exe.jar', "game/agents/$agent", 'build/libs/RiskItForTheBiscuit.jar', '-c', '500', '--time-unit=MILLISECONDS'
     }
 }
 

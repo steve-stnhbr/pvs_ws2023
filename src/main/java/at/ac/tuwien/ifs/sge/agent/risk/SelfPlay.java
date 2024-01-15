@@ -7,9 +7,10 @@ import at.ac.tuwien.ifs.sge.agent.risk.util.Tuple;
 import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
-import org.joda.time.format.DateTimeFormat;
 
 import java.io.PrintStream;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class SelfPlay {
+    private static final DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("HH:mm:ss");
     private final RiskItAgent player1, player2;
     private Risk risk;
 
@@ -45,7 +47,7 @@ public class SelfPlay {
                 System.out.println("Player 2's turn");
                 action = player2.computeNextAction(risk, 10000, TimeUnit.MILLISECONDS);
             }
-            System.out.println(DateTimeFormat.mediumDateTime().print(new Date().getTime()) + ": iteration #" + iterations + " done");
+            System.out.println(formatter.format(LocalTime.now()) + ": iteration #" + iterations + " done");
             if (action == null) {
                 risk = (Risk) risk.doAction();
                 continue;

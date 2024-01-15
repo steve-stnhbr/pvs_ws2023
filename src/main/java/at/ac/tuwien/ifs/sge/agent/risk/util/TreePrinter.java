@@ -54,6 +54,7 @@ public class TreePrinter {
 
   public interface TreeNode {
     public List<? extends TreeNode> getChildren();
+
     public String getLabel();
   }
 }

@@ -1067,9 +1067,10 @@ public class RiskHasher {
         }
 
         return Arrays.stream(actionEncoding)
-                .mapToObj(String::valueOf)
-                .collect(Collectors.joining(":"));
+          .mapToObj(String::valueOf)
+          .collect(Collectors.joining(":"));
       }
+
     }
 
     public static String encodeFortifyableTroops(RiskBoard board, int currentPlayer) {
