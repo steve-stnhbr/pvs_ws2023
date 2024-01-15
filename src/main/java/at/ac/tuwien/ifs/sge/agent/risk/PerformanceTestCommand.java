@@ -12,6 +12,8 @@ import java.util.List;
 
 public class PerformanceTestCommand {
   private final static DatasetWriter.CSV csv = new DatasetWriter.CSV("out/performance.csv");
+  private static final List<Process> spawnedProcesses = new ArrayList<>();
+
 
   int timeout;
 
@@ -24,6 +26,10 @@ public class PerformanceTestCommand {
       ProcessBuilder pb = new ProcessBuilder(command.split(" "));
       pb.redirectError(ProcessBuilder.Redirect.INHERIT);
       process = pb.start();
+
+      synchronized (spawnedProcesses) {
+        spawnedProcesses.add(process);
+      }
 
       // Read the output
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -90,6 +96,7 @@ public class PerformanceTestCommand {
     int numThreads = Runtime.getRuntime().availableProcessors() * 2;
     int timeout = 10000;
 
+
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;
       Thread thread = new Thread(() -> {
@@ -100,6 +107,20 @@ public class PerformanceTestCommand {
       }, "PerformanceTest #" + i);
       thread.start();
       Runtime.getRuntime().addShutdownHook(new Thread(thread::interrupt));
+      Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        // Interrupt the thread
+        thread.interrupt();
+
+        // Terminate spawned processes
+        synchronized (spawnedProcesses) {
+          for (Process p : spawnedProcesses) {
+            if (p != null) {
+              System.out.println("Destroying process");
+              p.destroyForcibly();
+            }
+          }
+        }
+      }));
     }
   }
 
