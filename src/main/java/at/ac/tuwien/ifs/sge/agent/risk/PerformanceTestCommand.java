@@ -13,7 +13,10 @@ import java.util.List;
 public class PerformanceTestCommand {
   private final static DatasetWriter.CSV csv = new DatasetWriter.CSV("out/performance.csv");
 
+  int timeout;
+
   public void run(int timeout) {
+    this.timeout = timeout;
     String command = "java -jar game/sge-1.0.2-exe.jar match game/sge-risk-1.0.2-exe.jar game/agents/mctsagent.jar build/libs/RiskItForTheBiscuit.jar -c " + timeout + " --time-unit=MILLISECONDS";
     Process process = null;
     try {
@@ -26,17 +29,17 @@ public class PerformanceTestCommand {
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
       List<String> outputLines = new ArrayList<>();
       String line;
+      int moves = 0;
 
       // Read the output until a certain string appears
       while ((line = reader.readLine()) != null) {
         outputLines.add(line);
-        System.out.println(line);
 
         // Check if the specified string appears in the output
         if (line.contains("[sge info]")) {
           // Call the storeState function with the last 7 lines of output
           storeState(outputLines);
-          break;
+          moves++;
         }
       }
 
@@ -79,18 +82,20 @@ public class PerformanceTestCommand {
     String utility1 = line3[2];
     String utility2 = line3[3];
 
-    csv.appendToCSV(String.format("%s,%s,%s,%s,%s,%s", player1, player2, score1, score2, utility1, utility2));
+    csv.appendToCSV(String.format("%s,%s,%s,%s,%s,%s,%d", player1, player2, score1, score2, utility1, utility2, timeout));
     System.out.printf("%s: Stored score %s:%s, %s:%s", Thread.currentThread().getName(), player1, score1, player2, score2);
   }
 
   public static void main(String[] args) {
     int numThreads = Runtime.getRuntime().availableProcessors() * 2;
+    int timeout = 10000;
 
     for (int i = 0; i < numThreads; i++) {
+      int finalI = i;
       Thread thread = new Thread(() -> {
         PerformanceTestCommand pt = new PerformanceTestCommand();
         while(!Thread.interrupted()) {
-          pt.run();
+          pt.run(timeout * ((finalI % 4) + 1));
         }
       }, "PerformanceTest #" + i);
       thread.start();
