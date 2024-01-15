@@ -17,7 +17,7 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
   private MCTSNode<T, A> parent;
   private List<MCTSNode<T, A>> children;
   private int visits;
-  private double utility;
+  private double utility, amafUtility;
   private int playerId;
 
 
@@ -82,6 +82,24 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
     return null;
   }
 
+  public double calculateAMAFUtilityValue() {
+    int totalVisits = 0;
+    double totalAMAFUtility = 0.0;
+
+    for (MCTSNode<T,A> child : children) {
+      double amafUtility = child.getAmafUtility();
+
+      totalVisits += child.visits;
+      totalAMAFUtility += (amafUtility * child.visits);
+    }
+
+    if (totalVisits > 0) {
+      return totalAMAFUtility / totalVisits;
+    } else {
+      return 0.0;
+    }
+  }
+
   public int getVisits() {
     return visits;
   }
@@ -124,6 +142,14 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
 
   public void setProperty(String key, Object value) {
       properties.put(key, value);
+  }
+
+  public double getAmafUtility() {
+    return amafUtility;
+  }
+
+  public void setAmafUtility(double amafUtility) {
+    this.amafUtility = amafUtility;
   }
 
   public Object getProperty(String key) {
