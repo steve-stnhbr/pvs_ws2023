@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="PerformanceTestCommand:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTestCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/LineManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/agents/mctsagent.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/games/sge-risk.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/sge.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,24 +63,46 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2aIVyRYKiYxATyMQn8P9ueutENM" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Run",
+    "JAR Application.RiskItForTheBiscuit.jar.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "com.google.cloudcode.ide_session_index": "20240116_0001",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/src/test/resources/agents",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2410314",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Application.PerformanceTestCommand">
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources/agents" />
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+      <recent name="$PROJECT_DIR$/src/test/resources/games" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="at.ac.tuwien.ifs.sge.agent.risk.test" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JAR Application.RiskItForTheBiscuit.jar">
     <configuration name="DNNTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.util.DNNTest" />
       <module name="RiskItForTheBiscuit.main" />
@@ -83,11 +117,11 @@
       </method>
     </configuration>
     <configuration name="PerformanceTestCommand" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.PerformanceTestCommand" />
-      <module name="RiskItForTheBiscuit.main" />
+      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.test.PerformanceTestCommand" />
+      <module name="RiskItForTheBiscuit.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.*" />
+          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -113,7 +147,7 @@
       <module name="RiskItForTheBiscuit.main" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.*" />
+          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -121,14 +155,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RiskItForTheBiscuit.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/PerformanceTestCommand_jar/RiskItForTheBiscuit.jar" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.PerformanceTestCommand" />
       <item itemvalue="Application.SelfPlay" />
       <item itemvalue="Application.DNNTest" />
       <item itemvalue="Application.RiskDataGeneration" />
+      <item itemvalue="JAR Application.RiskItForTheBiscuit.jar" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JAR Application.RiskItForTheBiscuit.jar" />
         <item itemvalue="Application.PerformanceTestCommand" />
         <item itemvalue="Application.SelfPlay" />
         <item itemvalue="Application.DNNTest" />
@@ -151,6 +191,8 @@
       <workItem from="1704737441387" duration="6610000" />
       <workItem from="1705332775674" duration="5494000" />
       <workItem from="1705350926752" duration="24000" />
+      <workItem from="1705352805080" duration="1874000" />
+      <workItem from="1705403816814" duration="6927000" />
     </task>
     <task id="LOCAL-00001" summary="merge">
       <option name="closed" value="true" />
