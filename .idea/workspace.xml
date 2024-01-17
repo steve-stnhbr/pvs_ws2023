@@ -9,13 +9,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
+    <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="Changed Thompson Sampling implementation. Added Backpropagation strategy for this and modified the Tree class to store a Map of successes as well as failures for all nodes.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/ThompsonSamplingBackpropagationStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/BasicBackpropagationStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/BasicBackpropagationStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
@@ -56,37 +65,12 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 3
-}</component>
   <component name="ProjectId" id="2aIVyRYKiYxATyMQn8P9ueutENM" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build pvs_ws2023.executor": "Run",
-    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Debug",
-    "JAR Application.RiskItForTheBiscuit.jar.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.google.cloudcode.ide_session_index": "20240117_0001",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/src/test/resources/agents",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2410314",
-    "vue.rearranger.settings.migration": "true"
-  }
-}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/resources/agents" />
@@ -215,10 +199,12 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="merge" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Changed Thompson Sampling implementation. Added Backpropagation strategy for this and modified the Tree class to store a Map of successes as well as failures for all nodes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed Thompson Sampling implementation. Added Backpropagation strategy for this and modified the Tree class to store a Map of successes as well as failures for all nodes." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

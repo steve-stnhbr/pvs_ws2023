@@ -12,7 +12,6 @@ public class BasicBackpropagationStrategy extends MCTSBackpropagationStrategy<Ri
 
   /**
    * This method backpropagates the utility of a child node to the parent node.
-   * @param child
    */
   @Override
   public void backpropagate(MCTSNode<Risk, RiskAction> leaf, List<RiskAction> actions, double utility, MCTSTree<Risk, RiskAction> tree) {

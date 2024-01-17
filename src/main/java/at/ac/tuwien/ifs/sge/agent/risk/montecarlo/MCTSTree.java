@@ -4,12 +4,11 @@ import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropag
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
+import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
+import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import at.ac.tuwien.ifs.sge.util.pair.ImmutablePair;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -20,6 +19,10 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     private final MCTSSimulationStrategy<T, A> simulationStrategy;
     private final MCTSBackpropagationStrategy<T, A> backpropagationStrategy;
     private final int playerId;
+
+    private final Map<MCTSNode<Risk, RiskAction>, Integer> successes = new HashMap<>(); // needed only for taylor sampling
+    private final Map<MCTSNode<Risk, RiskAction>, Integer> failures = new HashMap<>(); // needed only for taylor sampling
+
 
     public MCTSTree(T rootContent, MCTSSelectionStrategy<T, A> selectionStrategy, MCTSExpansionStrategy<T, A> expansionStrategy, MCTSSimulationStrategy<T, A> simulationStrategy, MCTSBackpropagationStrategy<T, A> backpropagationStrategy, int playerId) {
         this.selectionStrategy = selectionStrategy;
@@ -51,6 +54,40 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     }
 
     /**
+     * This method updates the successes and failures hashmaps for taylor sampling.
+     * If the utility increases after an action it is deemed a success. If it decreases it is deemed a failure.
+     *
+     * @param toUpdate the Node to update the maps for
+     * @param utilBefore the utility before the action (assumed to be 0.5 for the game start)
+     * @param utilAfter the utility after the action
+     */
+    public void updateSucessesAndFailures(MCTSNode<Risk, RiskAction> toUpdate, double utilBefore, double utilAfter) {
+        if (utilBefore >= utilAfter) {
+            if (this.failures.containsKey(toUpdate)) {
+                int failuresCountUpdate = this.failures.get(toUpdate) + 1;
+                this.failures.put(toUpdate, failuresCountUpdate);
+            } else {
+                this.failures.put(toUpdate, 1);
+            }
+        } else {
+            if (this.successes.containsKey(toUpdate)) {
+                int successesCountUpdate = this.successes.get(toUpdate) + 1;
+                this.successes.put(toUpdate, successesCountUpdate);
+            } else {
+                this.successes.put(toUpdate, 1);
+            }
+        }
+    }
+
+    public Map<MCTSNode<Risk, RiskAction>, Integer> getSuccesses() {
+        return successes;
+    }
+
+    public Map<MCTSNode<Risk, RiskAction>, Integer> getFailures() {
+        return failures;
+    }
+
+    /**
      * This method returns the best action according to the current tree. It will return the action accessible from the root node with the highest average utility.
      * @return The best action according to the current tree.
      */
@@ -60,6 +97,16 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
           .max(Comparator.comparingDouble(MCTSNode::getAverageUtility))
           .map(MCTSNode::getAction)
           .orElse(null);
+    }
+
+    public List<MCTSNode<Risk, RiskAction>> getAllNodesForState(Risk state, MCTSTree<Risk, RiskAction> tree) {
+        List<MCTSNode<Risk, RiskAction>> listOfNodesForState = new LinkedList<MCTSNode<Risk, RiskAction>>();
+        for (MCTSNode<Risk, RiskAction> node : tree){
+            if (node.getState().equals(state)) {
+                listOfNodesForState.add(node);
+            }
+        }
+        return listOfNodesForState;
     }
 
     @Override
