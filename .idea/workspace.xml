@@ -10,13 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/PerformanceTestCommand_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit_ucb1_random_random_amaf.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/LineManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/LineManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit.jar" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit_ucb1_random_random_basic.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,7 +189,7 @@
       <workItem from="1705350926752" duration="24000" />
       <workItem from="1705352805080" duration="1874000" />
       <workItem from="1705403816814" duration="8349000" />
-      <workItem from="1705480582950" duration="2553000" />
+      <workItem from="1705480582950" duration="2630000" />
     </task>
     <task id="LOCAL-00001" summary="merge">
       <option name="closed" value="true" />

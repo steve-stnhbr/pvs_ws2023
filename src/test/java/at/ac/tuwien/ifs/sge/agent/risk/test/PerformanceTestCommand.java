@@ -235,14 +235,14 @@ public class PerformanceTestCommand {
 
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;
-      Tuple<String, String> perm = permutations.get(i % permutations.size());
       Thread thread = new Thread(() -> {
         int runs = 0;
         PerformanceTestCommand pt = new PerformanceTestCommand(lineManager.getInteractor(finalI).setPrefix("PerformanceTest#" + finalI + ": "));
         while(!Thread.interrupted()) {
+          Tuple<String, String> perm = permutations.get((finalI + runs)  % permutations.size());
           System.out.println("Starting game " + game + " player1: " + perm.getA() + " player2: " + perm.getB());
           pt.run(
-            timeout * ((finalI + runs % 4) + 1),
+            timeout * (((finalI + runs) % 4) + 1),
             perm.getA(),
             perm.getB(),
             game
