@@ -3,6 +3,7 @@ package at.ac.tuwien.ifs.sge.agent.risk;
 import at.ac.tuwien.ifs.sge.agent.AbstractGameAgent;
 import at.ac.tuwien.ifs.sge.agent.GameAgent;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.AMAFBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.BasicBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
@@ -39,7 +40,7 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
 
   public RiskItAgent(Logger log) {
     //Do some setup before the TOURNAMENT starts.
-    this(log, new UCB1SelectionStrategy<>(), new RandomExpansionStrategy(), new RandomSimulationStrategy(), new BasicBackpropagationStrategy());
+    this(log, new UCB1SelectionStrategy<>(), new RandomExpansionStrategy(), new RandomSimulationStrategy(), new AMAFBackpropagationStrategy());
   }
 
   public RiskItAgent(Logger log, MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy, MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy, MCTSSimulationStrategy<Risk, RiskAction> simulationStrategy, MCTSBackpropagationStrategy<Risk, RiskAction> backpropagationStrategy) {

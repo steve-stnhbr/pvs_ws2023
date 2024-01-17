@@ -10,14 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/LineManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/agents/mctsagent.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/games/sge-risk.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/sge.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/PerformanceTestCommand_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit_ucb1_random_random_amaf.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/LineManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/LineManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit.jar" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/agents/RiskItForTheBiscuit_ucb1_random_random_basic.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,10 +74,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Run",
+    "Gradle.Build pvs_ws2023.executor": "Run",
+    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Debug",
     "JAR Application.RiskItForTheBiscuit.jar.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "com.google.cloudcode.ide_session_index": "20240116_0001",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.google.cloudcode.ide_session_index": "20240117_0001",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/src/test/resources/agents",
@@ -102,7 +103,7 @@
       <recent name="at.ac.tuwien.ifs.sge.agent.risk.test" />
     </key>
   </component>
-  <component name="RunManager" selected="JAR Application.RiskItForTheBiscuit.jar">
+  <component name="RunManager" selected="Application.PerformanceTestCommandAll">
     <configuration name="DNNTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.util.DNNTest" />
       <module name="RiskItForTheBiscuit.main" />
@@ -116,9 +117,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PerformanceTestCommand" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="PerformanceTestCommandAll" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.test.PerformanceTestCommand" />
       <module name="RiskItForTheBiscuit.test" />
+      <option name="PROGRAM_PARAMETERS" value="--players=agents/mctsagent.jar,agents/RiskItForTheBiscuit_ucb1_random_random_basic.jar,agents/RiskItForTheBiscuit_ucb1_random_random_amaf.jar" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.test.*" />
@@ -160,7 +162,7 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.PerformanceTestCommand" />
+      <item itemvalue="Application.PerformanceTestCommandAll" />
       <item itemvalue="Application.SelfPlay" />
       <item itemvalue="Application.DNNTest" />
       <item itemvalue="Application.RiskDataGeneration" />
@@ -169,7 +171,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="JAR Application.RiskItForTheBiscuit.jar" />
-        <item itemvalue="Application.PerformanceTestCommand" />
+        <item itemvalue="Application.PerformanceTestCommandAll" />
         <item itemvalue="Application.SelfPlay" />
         <item itemvalue="Application.DNNTest" />
         <item itemvalue="Application.RiskDataGeneration" />
@@ -192,7 +194,8 @@
       <workItem from="1705332775674" duration="5494000" />
       <workItem from="1705350926752" duration="24000" />
       <workItem from="1705352805080" duration="1874000" />
-      <workItem from="1705403816814" duration="6927000" />
+      <workItem from="1705403816814" duration="8349000" />
+      <workItem from="1705480582950" duration="2553000" />
     </task>
     <task id="LOCAL-00001" summary="merge">
       <option name="closed" value="true" />

@@ -2,6 +2,7 @@ package at.ac.tuwien.ifs.sge.agent.risk.test;
 
 import at.ac.tuwien.ifs.sge.agent.risk.util.DatasetWriter;
 import at.ac.tuwien.ifs.sge.agent.risk.util.LineManager;
+import at.ac.tuwien.ifs.sge.agent.risk.util.Tuple;
 import com.google.common.io.Files;
 
 import java.io.BufferedReader;
@@ -109,7 +110,7 @@ public class PerformanceTestCommand {
 
       // Print the exit value of the process
       interactor.write("Exit value: " + process.exitValue());
-      extractScore(outputLines, moves);
+      extractScore(outputLines, moves, managePath, gamePath, player1Path, player2Path);
       // delete the temporary files
       deleted(player1Path);
       deleted(player2Path);
@@ -187,7 +188,12 @@ public class PerformanceTestCommand {
     interactor.write(String.join(" ", lines));
   }
 
-  private void extractScore(List<String> outputLines, int moves) {
+  private void extractScore(List<String> outputLines, int moves, String managePath, String gamePath, String player1Path, String player2Path) {
+    String manageName = managePath.substring(managePath.lastIndexOf("/") + 1);
+    String gameName = gamePath.substring(gamePath.lastIndexOf("/") + 1);
+    String player1Name = player1Path.substring(player1Path.lastIndexOf("/") + 1);
+    String player2Name = player2Path.substring(player2Path.lastIndexOf("/") + 1);
+
     int startIndex = Math.max(0, outputLines.size() - 7);
     List<String> lines = outputLines.subList(startIndex, outputLines.size());
     lines = lines.stream().filter(line -> line != null && line.contains("|") && !line.contains("+")).collect(Collectors.toList());
@@ -204,7 +210,7 @@ public class PerformanceTestCommand {
     String utility1 = line3[2];
     String utility2 = line3[3];
 
-    csv.appendToCSV(String.format("%s,%s,%s,%s,%s,%s,%d,%d", player1, player2, score1, score2, utility1, utility2, timeout, moves));
+    csv.appendToCSV(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%d", manageName, gameName, player1Name, player2Name, player1, player2, score1, score2, utility1, utility2, timeout, moves));
     interactor.write(String.format("Stored score %s:%s, %s:%s", player1, score1, player2, score2));
   }
 
@@ -213,17 +219,35 @@ public class PerformanceTestCommand {
     int numThreads = Runtime.getRuntime().availableProcessors() * 2;
     LineManager lineManager = new LineManager(numThreads);
     int timeout = 10000;
+    String[] players;
+
+    if (argMap.containsKey("players")) {
+      players = argMap.get("players").split(",");
+    } else {
+      String player1 = argMap.getOrDefault("player1", "agents/mctsagent.jar");
+      String player2 = argMap.getOrDefault("player2", "agents/RiskItForTheBiscuit_ucb1_random_random_basic.jar");
+      players = new String[] {player1, player2};
+    }
+
+    String game = argMap.getOrDefault("game", "games/sge-risk.jar");
+
+    List<Tuple<String, String>> permutations = generatePermutations(players);
 
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;
+      Tuple<String, String> perm = permutations.get(i % permutations.size());
       Thread thread = new Thread(() -> {
+        int runs = 0;
         PerformanceTestCommand pt = new PerformanceTestCommand(lineManager.getInteractor(finalI).setPrefix("PerformanceTest#" + finalI + ": "));
         while(!Thread.interrupted()) {
+          System.out.println("Starting game " + game + " player1: " + perm.getA() + " player2: " + perm.getB());
           pt.run(
-            timeout * ((finalI % 4) + 1),
-            argMap.getOrDefault("player1", "agents/mctsagent.jar"),
-            argMap.getOrDefault("player2", "agents/RiskItForTheBiscuit.jar"),
-            argMap.getOrDefault("game", "games/sge-risk.jar"));
+            timeout * ((finalI + runs % 4) + 1),
+            perm.getA(),
+            perm.getB(),
+            game
+            );
+          runs++;
         }
       }, "PerformanceTest #" + i);
       thread.start();
@@ -264,6 +288,37 @@ public class PerformanceTestCommand {
     }
 
     return params;
+  }
+
+  public static List<Tuple<String, String>> generatePermutations(String[] array) {
+    List<Tuple<String, String>> result = new ArrayList<>();
+    List<String> currentPermutation = new ArrayList<>();
+    boolean[] used = new boolean[array.length];
+
+    generatePermutationsHelper(array, currentPermutation, used, result);
+
+    return result;
+  }
+
+  private static void generatePermutationsHelper(String[] array,
+                                                 List<String> currentPermutation,
+                                                 boolean[] used,
+                                                 List<Tuple<String, String>> result) {
+    if (currentPermutation.size() == 2) {
+      // Add a new Tuple to the result
+      result.add(new Tuple<>(currentPermutation.get(0), currentPermutation.get(1)));
+      return;
+    }
+
+    for (int i = 0; i < array.length; i++) {
+      if (!used[i]) {
+        used[i] = true;
+        currentPermutation.add(array[i]);
+        generatePermutationsHelper(array, currentPermutation, used, result);
+        used[i] = false;
+        currentPermutation.remove(currentPermutation.size() - 1);
+      }
+    }
   }
 
 }

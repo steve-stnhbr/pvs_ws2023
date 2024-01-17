@@ -19,7 +19,7 @@ public class LineManager {
 
   public void write(int line, String s) {
     lines.put(line, s);
-    System.out.println("\f");
+    clearScreen();
     for (int i = 0; i < lines.size(); i++) {
       System.out.println(lines.get(i));
     }
