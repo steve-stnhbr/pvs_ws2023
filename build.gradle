@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.jgrapht:jgrapht-ext:1.5.2'
     implementation 'org.jgrapht:jgrapht-io:1.5.2'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'net.bytebuddy:byte-buddy:1.11.18'
     //implementation 'cisd:jhdf5:19.04.1'
     //implementation 'org.deeplearning4j:deeplearning4j-core:' + dl4j_master_version
     //implementation 'org.nd4j:nd4j-native-platform:' + dl4j_master_version

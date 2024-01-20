@@ -33,6 +33,11 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   GameAgent<Risk, RiskAction> {
   public static final int SIMULATION_STEPS = 45;
 
+  private static final MCTSSelectionStrategy<Risk, RiskAction> DEFAULT_SELECTION_STRATEGY = new UCB1SelectionStrategy<>();
+  private static final MCTSExpansionStrategy<Risk, RiskAction> DEFAULT_EXPANSION_STRATEGY = new RandomExpansionStrategy();
+  private static final MCTSSimulationStrategy<Risk, RiskAction> DEFAULT_SIMULATION_STRATEGY = new RandomSimulationStrategy();
+  private static final MCTSBackpropagationStrategy<Risk, RiskAction> DEFAULT_BACKPROPAGATION_STRATEGY = new AMAFBackpropagationStrategy();
+
   private final MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy;
   private final MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy;
   private final MCTSSimulationStrategy<Risk, RiskAction> simulationStrategy;
@@ -40,7 +45,12 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
 
   public RiskItAgent(Logger log) {
     //Do some setup before the TOURNAMENT starts.
-    this(log, new UCB1SelectionStrategy<>(), new RandomExpansionStrategy(), new RandomSimulationStrategy(), new AMAFBackpropagationStrategy());
+    this(log,
+      getDefaultSelectionStrategy(),
+      getDefaultExpansionStrategy(),
+      getDefaultSimulationStrategy(),
+      getDefaultBackpropagationStrategy()
+    );
   }
 
   public RiskItAgent(Logger log, MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy, MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy, MCTSSimulationStrategy<Risk, RiskAction> simulationStrategy, MCTSBackpropagationStrategy<Risk, RiskAction> backpropagationStrategy) {
@@ -86,5 +96,18 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   @Override
   public void destroy() {
     //Do some tear down after the TOURNAMENT
+  }
+
+  private static MCTSSelectionStrategy<Risk, RiskAction> getDefaultSelectionStrategy() {
+    return DEFAULT_SELECTION_STRATEGY;
+  }
+  private static MCTSExpansionStrategy<Risk, RiskAction> getDefaultExpansionStrategy() {
+      return DEFAULT_EXPANSION_STRATEGY;
+  }
+  private static MCTSSimulationStrategy<Risk, RiskAction> getDefaultSimulationStrategy() {
+      return DEFAULT_SIMULATION_STRATEGY;
+  }
+  private static MCTSBackpropagationStrategy<Risk, RiskAction> getDefaultBackpropagationStrategy() {
+      return DEFAULT_BACKPROPAGATION_STRATEGY;
   }
 }

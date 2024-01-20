@@ -58,6 +58,8 @@
       <element id="library" level="project" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.17" />
       <element id="dir-copy" path="$PROJECT_DIR$/src/test/resources" />
       <element id="module-output" name="RiskItForTheBiscuit.test" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.11.18/15c6ab9834349d9a888999f097fe453f6df3bf88/byte-buddy-1.11.18.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Gradle: net.bytebuddy:byte-buddy:1.11.18" />
     </root>
   </artifact>
 </component>
