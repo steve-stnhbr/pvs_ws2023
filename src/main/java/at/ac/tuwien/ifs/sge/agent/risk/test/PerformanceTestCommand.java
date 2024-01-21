@@ -16,6 +16,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -307,6 +308,8 @@ public class PerformanceTestCommand {
     System.out.println("Players: " + Arrays.toString(players));
 
     List<Tuple<String, String>> permutations = generatePermutations(players);
+
+    Collections.shuffle(permutations);
 
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;
