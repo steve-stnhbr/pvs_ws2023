@@ -290,7 +290,6 @@ public class PerformanceTestCommand {
       players = Arrays.stream(getResourceListing(PerformanceTestCommand.class, "agents/")).map(s -> "agents/" + s).toArray(String[]::new);
     }
 
-
     String gamePath;
     String manage;
     if (extractBefore) {

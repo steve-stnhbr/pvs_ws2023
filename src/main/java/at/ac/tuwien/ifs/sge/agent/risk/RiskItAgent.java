@@ -15,12 +15,6 @@ import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.concurrent.TimeUnit;
 
 public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
@@ -113,5 +107,14 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   @Override
   public void destroy() {
     //Do some tear down after the TOURNAMENT
+  }
+
+  @Override
+  public String toString() {
+    return String.format("RiskItForTheBiscuitAgent(%s,%s,%s,%s)",
+      selectionStrategy.getClass().getSimpleName().replace("Strategy", ""),
+      expansionStrategy.getClass().getSimpleName().replace("Strategy", ""),
+      simulationStrategy.getClass().getSimpleName().replace("Strategy", ""),
+      backpropagationStrategy.getClass().getSimpleName().replace("Strategy", ""));
   }
 }

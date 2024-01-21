@@ -44,6 +44,57 @@ jar {
     }
 }
 
+tasks.register('generateAgents', JavaExec) {
+    println("Generating agents")
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'at.ac.tuwien.ifs.sge.agent.risk.AgentGenerator'
+    args = ['build/libs/RiskItForTheBiscuit.jar']
+}
+
+tasks.register('copyAgents', Copy) {
+    // check if generate input is set
+    var generateInput = project.hasProperty('generate')
+
+    if (generateInput) {
+        println("Generating input")
+        dependsOn 'generateAgents'
+    }
+
+    dependsOn 'processResources'
+    from 'out/generated/' // Replace with the actual path to your source folder
+    into "src/main/resources/agents" // Target the resources directory
+}
+
+tasks.register("buildPerfTest", Jar) {
+    var copyAgents = project.hasProperty('copyAgents')
+    if (copyAgents) {
+        dependsOn 'copyAgents'
+    }
+
+    dependsOn 'classes', 'processResources'
+    zip64 = true
+    println("Packaging performance test")
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    // Include compiled classes
+    from sourceSets.main.output
+
+    // Include resources from the resources folder
+    from sourceSets.main.resources
+
+    // Include files from the classpath (e.g., dependencies)
+    from configurations.compileClasspath
+
+    manifest {
+        attributes 'Main-Class': 'at.ac.tuwien.ifs.sge.agent.risk.test.PerformanceTestCommand'
+        attributes 'Manifest-Version': '1.0'
+    }
+    archiveFileName.set("PerfTest.jar")
+    destinationDirectory.set(file("out/artifacts/PerfTest"))
+}
+
 def agents = fileTree('game/agents').include('*.jar').collect { it.getName()}
 
 agents.each { agent ->

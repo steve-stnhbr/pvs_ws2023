@@ -52,7 +52,7 @@ public class AgentGenerator {
         Class<?> simulationMethod = permutation.get(2);
         Class<?> backpropagationMethod = permutation.get(3);
 
-        generateModification(args[0], selectionMethod, expansionMethod, simulationMethod, backpropagationMethod);
+        generateModification(args.length > 0 ? args[0] : "build/libs/RiskItForTheBiscuit.jar" , selectionMethod, expansionMethod, simulationMethod, backpropagationMethod);
       });
   }
 
