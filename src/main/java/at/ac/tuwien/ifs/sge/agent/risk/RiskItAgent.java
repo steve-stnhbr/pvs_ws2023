@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   GameAgent<Risk, RiskAction> {
-  public static final int SIMULATION_STEPS = 45;
+  public static final int SIMULATION_STEPS = 250;
 
   private static final MCTSSelectionStrategy<Risk, RiskAction> DEFAULT_SELECTION_STRATEGY = new ThompsonSamplingStrategy();
   private static final MCTSExpansionStrategy<Risk, RiskAction> DEFAULT_EXPANSION_STRATEGY = new RandomExpansionStrategy();

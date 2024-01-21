@@ -9,6 +9,7 @@ import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import at.ac.tuwien.ifs.sge.util.pair.ImmutablePair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -20,9 +21,8 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     private final MCTSBackpropagationStrategy<T, A> backpropagationStrategy;
     private final int playerId;
 
-    private final Map<MCTSNode<T, A>, Integer> successes = new HashMap<>(); // needed only for taylor sampling
-    private final Map<MCTSNode<T, A>, Integer> failures = new HashMap<>(); // needed only for taylor sampling
-    private final Map<T, List<MCTSNode<T,A>>> stateToNodes = new IdentityHashMap<>();
+    //private final Map<T, List<MCTSNode<T,A>>> stateToNodes = new HashMap<>();
+    private final Map<Integer, List<MCTSNode<T,A>>> stateToNodes = new HashMap<>();
 
     public MCTSTree(T rootContent, MCTSSelectionStrategy<T, A> selectionStrategy, MCTSExpansionStrategy<T, A> expansionStrategy, MCTSSimulationStrategy<T, A> simulationStrategy, MCTSBackpropagationStrategy<T, A> backpropagationStrategy, int playerId) {
         this.selectionStrategy = selectionStrategy;
@@ -61,6 +61,8 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     public A getBestAction() {
         System.out.println("Root visits: " + root.getVisits());
         System.out.println("map: " + stateToNodes.values().stream().map(List::size).reduce(0, Integer::sum));
+        System.out.println(stateToNodes);
+        System.out.println("tree:" + this.stream().count());
         return root.getChildren()
           .stream()
           .max(Comparator.comparingDouble(MCTSNode::getAverageUtility))
@@ -69,30 +71,17 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     }
 
     public List<MCTSNode<T, A>> getAllNodesForState(T state, MCTSTree<T, A> tree) {
-        List<MCTSNode<T, A>> listOfNodesForState = new LinkedList<>();
-        for (MCTSNode<T, A> node : tree){
-            if (node.getState().equals(state)) {
-                listOfNodesForState.add(node);
-            }
-        }
-
-        if (!listOfNodesForState.isEmpty()) {
-            System.out.println("Found one (list)");
-        }
-
-        if (stateToNodes.get(state) != null) {
-            System.out.println("Found one (map)");
-        }
-
+        List<MCTSNode<T, A>> listOfNodesForState = tree.stream()
+          .filter(node -> node.getState() == (state))
+          .collect(Collectors.toList());
         return listOfNodesForState;
+        // FIXME: for some reason the map does not work
         //return stateToNodes.getOrDefault(state, new ArrayList<>());
     }
 
     public void onAdd(MCTSNode<T, A> node) {
-        if (!stateToNodes.containsKey(node.getState())) {
-            stateToNodes.put(node.getState(), new ArrayList<>());
-        }
-        stateToNodes.get(node.getState()).add(node);
+        // FIXME: if the map is used, uncomment this
+        //stateToNodes.computeIfAbsent(node.getState().hashCode(), k -> new ArrayList<>()).add(node);
     }
 
     @Override
@@ -105,31 +94,7 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     }
 
     public Spliterator<MCTSNode<T, A>> spliterator() {
-        return new Spliterator<>() {
-            @Override
-            public boolean tryAdvance(java.util.function.Consumer<? super MCTSNode<T, A>> action) {
-                if (root == null) {
-                    return false;
-                }
-                action.accept(root);
-                return true;
-            }
-
-            @Override
-            public Spliterator<MCTSNode<T, A>> trySplit() {
-                return null;
-            }
-
-            @Override
-            public long estimateSize() {
-                return Long.MAX_VALUE;
-            }
-
-            @Override
-            public int characteristics() {
-                return Spliterator.DISTINCT | Spliterator.NONNULL | Spliterator.ORDERED;
-            }
-        };
+        return Spliterators.spliteratorUnknownSize(iterator(), Spliterator.ORDERED);
     }
 
     public static class Iterator<T, A> implements java.util.Iterator<MCTSNode<T, A>> {
