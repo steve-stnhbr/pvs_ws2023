@@ -10,15 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/MainPerformanceTestCommand.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/PerfTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/PerformanceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/PerformanceTestCommand_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RiskItForTheBiscuit_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RiskItForTheBiscuit_jar2.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/AgentGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/AgentGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +80,7 @@
     "Gradle.pvs_ws2023 [:AgentGenerator.main()].executor": "Run",
     "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Run",
     "Gradle.pvs_ws2023 [dependencies].executor": "Run",
+    "Gradle.pvs_ws2023 [jar].executor": "Run",
     "Gradle.pvs_ws2023:perftest [:perftest:PerformanceTestCommand.main()].executor": "Run",
     "Gradle.pvs_ws2023:perftest:java [:perftest:java:PerformanceTestCommand.main()].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -96,7 +90,7 @@
     "jdk.selected.JAVA_MODULE": "11",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/perftest/src/main/java/at/ac/tuwien",
-    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/run",
+    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/src/main/resources/agents",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -110,8 +104,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/run" />
       <recent name="$PROJECT_DIR$/src/main/resources/agents" />
+      <recent name="$PROJECT_DIR$/run" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/perftest/src/perftest" />
       <recent name="$PROJECT_DIR$/perftest/java/src/main/resources" />
@@ -129,7 +123,7 @@
       <recent name="at.ac.tuwien.ifs.sge.agent.risk.test" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.PerformanceTestCommand">
+  <component name="RunManager" selected="Application.AgentGenerator">
     <configuration name="AgentGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.AgentGenerator" />
       <module name="RiskItForTheBiscuit.main" />
@@ -194,6 +188,28 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="pvs_ws2023 [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="RiskItForTheBiscuit.jar" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/PerformanceTestCommand_jar/RiskItForTheBiscuit.jar" />
       <method v="2" />
@@ -201,16 +217,17 @@
     <list>
       <item itemvalue="Application.PerformanceTestCommand" />
       <item itemvalue="Application.AgentGenerator" />
+      <item itemvalue="Gradle.pvs_ws2023 [jar]" />
       <item itemvalue="Gradle.pvs_ws2023 [dependencies]" />
       <item itemvalue="JAR Application.RiskItForTheBiscuit.jar" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.pvs_ws2023 [jar]" />
         <item itemvalue="Application.PerformanceTestCommand" />
         <item itemvalue="Application.PerformanceTestCommand" />
         <item itemvalue="Gradle.pvs_ws2023 [dependencies]" />
         <item itemvalue="Application.AgentGenerator" />
-        <item itemvalue="JAR Application.RiskItForTheBiscuit.jar" />
       </list>
     </recent_temporary>
   </component>
@@ -232,7 +249,7 @@
       <workItem from="1705352805080" duration="1874000" />
       <workItem from="1705403816814" duration="8349000" />
       <workItem from="1705480582950" duration="2630000" />
-      <workItem from="1705844575583" duration="3365000" />
+      <workItem from="1705844575583" duration="10317000" />
     </task>
     <task id="LOCAL-00001" summary="merge">
       <option name="closed" value="true" />

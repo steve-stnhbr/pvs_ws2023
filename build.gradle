@@ -37,6 +37,9 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+    processResources.exclude('agents/**')
+    processResources.exclude('games/**')
+    processResources.exclude('sge.jar')
     manifest {
         attributes 'Sge-Type': 'agent'
         attributes 'Agent-Class': 'at.ac.tuwien.ifs.sge.agent.risk.RiskItAgent'

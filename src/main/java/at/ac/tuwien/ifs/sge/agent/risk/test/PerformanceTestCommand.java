@@ -272,8 +272,8 @@ public class PerformanceTestCommand {
 
   public static void main(String[] args) throws URISyntaxException, IOException {
     Map<String, String> argMap = convertToKeyValuePair(args);
-
-    int numThreads = Integer.parseInt(argMap.getOrDefault("threads", String.valueOf(Runtime.getRuntime().availableProcessors() * 2)));
+    int threadMultiplier = Integer.parseInt(argMap.getOrDefault("thread_multiplier", "2"));
+    int numThreads = Integer.parseInt(argMap.getOrDefault("threads", String.valueOf(Runtime.getRuntime().availableProcessors() * threadMultiplier)));
     int timeout = Integer.parseInt(argMap.getOrDefault("timeout", "10000"));
     final boolean extractBefore = Boolean.parseBoolean(argMap.getOrDefault("extract_early", "true"));
     String game = argMap.getOrDefault("game", "games/sge-risk.jar");
@@ -313,8 +313,15 @@ public class PerformanceTestCommand {
       Thread thread = new Thread(() -> {
         int runs = 0;
         while(!Thread.interrupted()) {
-          //PerformanceTestCommand pt = new PerformanceTestCommand(lineManager.getInteractor(finalI).setPrefix("PerformanceTest#" + finalI + ": "));
-          PerformanceTestCommand pt = new PerformanceTestCommand(new LineManager.Interactor.Default().setPrefix("PerformanceTest#" + finalI + ": "));
+          LineManager.Interactor interactor;
+          if (argMap.containsKey("format")) {
+            interactor = lineManager.getInteractor(finalI);
+          } else {
+            interactor = new LineManager.Interactor.Default();
+          }
+          interactor.setPrefix("PerformanceTest#" + finalI + ": ");
+
+          PerformanceTestCommand pt = new PerformanceTestCommand(interactor);
           Tuple<String, String> perm = permutations.get((finalI + runs)  % permutations.size());
           System.out.println("Starting game " + game + " player1: " + perm.getA() + " player2: " + perm.getB());
           pt.run(
