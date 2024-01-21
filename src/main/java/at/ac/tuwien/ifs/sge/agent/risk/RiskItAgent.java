@@ -3,12 +3,12 @@ package at.ac.tuwien.ifs.sge.agent.risk;
 import at.ac.tuwien.ifs.sge.agent.AbstractGameAgent;
 import at.ac.tuwien.ifs.sge.agent.GameAgent;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
-import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.AMAFBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropagationStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.ThompsonSamplingBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrategy;
-import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.UCB1SelectionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.ThompsonSamplingStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
 import at.ac.tuwien.ifs.sge.engine.Logger;
@@ -21,10 +21,10 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   GameAgent<Risk, RiskAction> {
   public static final int SIMULATION_STEPS = 45;
 
-  private static final MCTSSelectionStrategy<Risk, RiskAction> DEFAULT_SELECTION_STRATEGY = new UCB1SelectionStrategy<>();
+  private static final MCTSSelectionStrategy<Risk, RiskAction> DEFAULT_SELECTION_STRATEGY = new ThompsonSamplingStrategy();
   private static final MCTSExpansionStrategy<Risk, RiskAction> DEFAULT_EXPANSION_STRATEGY = new RandomExpansionStrategy();
   private static final MCTSSimulationStrategy<Risk, RiskAction> DEFAULT_SIMULATION_STRATEGY = new RandomSimulationStrategy();
-  private static final MCTSBackpropagationStrategy<Risk, RiskAction> DEFAULT_BACKPROPAGATION_STRATEGY = new AMAFBackpropagationStrategy();
+  private static final MCTSBackpropagationStrategy<Risk, RiskAction> DEFAULT_BACKPROPAGATION_STRATEGY = new ThompsonSamplingBackpropagationStrategy();
 
   private final MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy;
   private final MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy;
@@ -81,22 +81,27 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   @Override
   public RiskAction computeNextAction(Risk game, long computationTime, TimeUnit timeUnit) {
     super.setTimers(computationTime, timeUnit); //Makes sure shouldStopComputation() works
+    try {
+      MCTSTree<Risk, RiskAction> tree = new MCTSTree<>(game,
+        this.selectionStrategy,
+        this.expansionStrategy,
+        this.simulationStrategy,
+        this.backpropagationStrategy,
+        playerId);
+      while (!shouldStopComputation()) {
+        tree.simulate(SIMULATION_STEPS, TIMEOUT);
+      }
 
-    MCTSTree<Risk, RiskAction> tree = new MCTSTree<>(game,
-      this.selectionStrategy,
-      this.expansionStrategy,
-      this.simulationStrategy,
-      this.backpropagationStrategy,
-      playerId);
-    while (!shouldStopComputation()) {
-      tree.simulate(SIMULATION_STEPS, TIMEOUT);
+      RiskAction bestAction = tree.getBestAction();
+
+      log.debugf("Found best move: %s", bestAction.toString());
+
+      return bestAction;
+    } catch(Exception e) {
+      log.errorf("Exception while computing next action: %s", e.getMessage());
+      e.printStackTrace();
+      return null;
     }
-
-    RiskAction bestAction = tree.getBestAction();
-
-    log.debugf("Found best move: %s", bestAction.toString());
-
-    return bestAction;
   }
 
   @Override

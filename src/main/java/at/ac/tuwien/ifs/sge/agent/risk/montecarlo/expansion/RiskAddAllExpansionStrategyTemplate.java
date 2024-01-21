@@ -17,7 +17,7 @@ public abstract class RiskAddAllExpansionStrategyTemplate extends MCTSExpansionS
     node.getState().getPossibleActions()
       .forEach(action -> {
         Risk newState = (Risk) node.getState().doAction(action).getGame();
-        MCTSNode<Risk, RiskAction> generatedChild = new MCTSNode<>(newState, node, action, newState.getCurrentPlayer());
+        MCTSNode<Risk, RiskAction> generatedChild = new MCTSNode<>(newState, node, action, newState.getCurrentPlayer(), node.getTree());
         node.addChild(generatedChild);
         generatedChildren.add(generatedChild);
       });

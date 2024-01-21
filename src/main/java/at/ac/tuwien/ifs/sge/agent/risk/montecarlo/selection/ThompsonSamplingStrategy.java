@@ -5,10 +5,11 @@ import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 
+import java.util.List;
 import java.util.Set;
 import org.apache.commons.math3.distribution.BetaDistribution;
 
-public class ThompsonSamplingStrategy<T, A> extends MCTSSelectionStrategy<Risk, RiskAction> {
+public class ThompsonSamplingStrategy extends MCTSSelectionStrategy<Risk, RiskAction> {
 
     @Override
     public MCTSNode<Risk, RiskAction> select(MCTSNode<Risk, RiskAction> root, MCTSTree<Risk, RiskAction> tree) {
@@ -16,9 +17,12 @@ public class ThompsonSamplingStrategy<T, A> extends MCTSSelectionStrategy<Risk, 
         double maxThompsonSample = Double.NEGATIVE_INFINITY;
         MCTSNode<Risk, RiskAction> selected = null;
 
-        if (root.isLeaf()) return root;
-        for (MCTSNode<Risk, RiskAction> node : tree.getAllNodesForState(risk, tree)) {
-            double sample = sampleBeta(tree.getSuccesses().get(node), tree.getFailures().get(node));
+        if (root.isLeaf())
+            return root;
+        List<MCTSNode<Risk,RiskAction>> nodesForState = tree.getAllNodesForState(risk, tree);
+        if (nodesForState == null || nodesForState.isEmpty()) return root;
+        for (MCTSNode<Risk, RiskAction> node : nodesForState) {
+            double sample = sampleBeta(node.getIntProperty("successes", 0), node.getIntProperty("failures", 0));
             if (sample > maxThompsonSample) {
                 maxThompsonSample = sample;
                 selected = node;

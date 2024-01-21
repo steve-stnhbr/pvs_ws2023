@@ -22,10 +22,19 @@ public class ThompsonSamplingBackpropagationStrategy extends MCTSBackpropagation
             if (node.getParent() != null) {
                 MCTSNode<Risk, RiskAction> currentParent = node.getParent();
                 double utilityBefore = currentParent.getUtility();
-                tree.updateSucessesAndFailures(node, utilityBefore, utilityAfter);
+                //tree.updateSucessesAndFailures(node, utilityBefore, utilityAfter);
+                if (utilityAfter >= utilityBefore) {
+                    node.setProperty("successes", node.hasProperty("successes") ? node.getIntProperty("successes") + 1 : 1);
+                } else {
+                    node.setProperty("failures", node.hasProperty("failures") ? node.getIntProperty("failures") + 1 : 1);
+                }
                 if (currentParent.getParent() == null) { // if parent is root we need to update it too
                     utilityBefore = 0.5; // I assume the starting utility to be 0.5
-                    tree.updateSucessesAndFailures(currentParent, utilityBefore, utilityAfter);
+                    if (utilityAfter >= utilityBefore) {
+                        currentParent.setProperty("successes", currentParent.hasProperty("successes") ? currentParent.getIntProperty("successes") + 1 : 1);
+                    } else {
+                        currentParent.setProperty("failures", currentParent.hasProperty("failures") ? currentParent.getIntProperty("failures") + 1 : 1);
+                    }
                 }
             }
             node = node.getParent();

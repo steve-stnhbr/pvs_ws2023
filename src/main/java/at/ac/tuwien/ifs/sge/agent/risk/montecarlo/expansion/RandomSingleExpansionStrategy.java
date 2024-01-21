@@ -14,7 +14,7 @@ public class RandomSingleExpansionStrategy extends MCTSExpansionStrategy<Risk, R
       .findFirst()
       .orElseThrow(() -> new RuntimeException("No possible actions."));
     Risk newState = (Risk) node.getState().doAction(selectedAction);
-    MCTSNode<Risk, RiskAction> generatedNode = new MCTSNode<>(newState, node, selectedAction, node.getPlayerId());
+    MCTSNode<Risk, RiskAction> generatedNode = new MCTSNode<>(newState, node, selectedAction, node.getPlayerId(), node.getTree());
     node.addChild(generatedNode);
     return generatedNode;
   }

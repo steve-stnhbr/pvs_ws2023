@@ -11,7 +11,14 @@
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/ThompsonSamplingBackpropagationStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/ThompsonSamplingBackpropagationStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/RandomSingleExpansionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/RandomSingleExpansionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/RiskAddAllExpansionStrategyTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/expansion/RiskAddAllExpansionStrategyTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tree.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tree.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +255,7 @@
       <workItem from="1705352805080" duration="1874000" />
       <workItem from="1705403816814" duration="8349000" />
       <workItem from="1705480582950" duration="2630000" />
-      <workItem from="1705844575583" duration="10967000" />
+      <workItem from="1705844575583" duration="19333000" />
     </task>
     <task id="LOCAL-00001" summary="merge">
       <option name="closed" value="true" />

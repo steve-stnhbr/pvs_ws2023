@@ -1,6 +1,7 @@
 package at.ac.tuwien.ifs.sge.agent.risk.montecarlo;
 
 import at.ac.tuwien.ifs.sge.agent.risk.util.TreePrinter;
+import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import hu.webarticum.treeprinter.TreeNode;
 import org.checkerframework.checker.units.qual.A;
@@ -20,21 +21,23 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
   private double utility, amafUtility;
   private int playerId;
 
+  private final MCTSTree<T, A> tree;
 
   private T state;
   private final A action;
 
-  public MCTSNode(T state) {
-    this(state, null, null, -1);
+  public MCTSNode(T state, MCTSTree<T, A> tree) {
+    this(state, null, null, -1, tree);
   }
 
-  public MCTSNode(T state, MCTSNode<T, A> parent, A action, int playerId) {
+  public MCTSNode(T state, MCTSNode<T, A> parent, A action, int playerId, MCTSTree<T, A> tree) {
     this.state = state;
     this.parent = parent;
     this.playerId = playerId;
     this.action = action;
     this.children = new ArrayList<>();
     this.properties = new HashMap<>();
+    this.tree = tree;
   }
 
   public MCTSNode<T, A> getParent() {
@@ -60,6 +63,7 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
   public void addChild(MCTSNode<T, A> node) {
     node.setParent(this);
     children.add(node);
+    tree.onAdd(node);
   }
 
   public double getAverageUtility() {
@@ -143,6 +147,9 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
   public void setProperty(String key, Object value) {
       properties.put(key, value);
   }
+  public boolean hasProperty(String key) {
+      return properties.containsKey(key);
+  }
 
   public double getAmafUtility() {
     return amafUtility;
@@ -162,6 +169,14 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
 
   public int getIntProperty(String key) {
       return (int) properties.get(key);
+  }
+
+  public int getIntProperty(String key, int defaultValue) {
+      if (properties.containsKey(key)) {
+          return (int) properties.get(key);
+      } else {
+          return defaultValue;
+      }
   }
 
   /**
@@ -192,5 +207,9 @@ public class MCTSNode<T, A> implements TreeNode, TreePrinter.TreeNode {
       ", state=" + state +
       ", action=" + action +
       '}';
+  }
+
+  public MCTSTree<T, A> getTree() {
+    return tree;
   }
 }

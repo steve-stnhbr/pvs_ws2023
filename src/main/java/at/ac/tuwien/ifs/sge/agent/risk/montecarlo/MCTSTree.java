@@ -20,16 +20,16 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     private final MCTSBackpropagationStrategy<T, A> backpropagationStrategy;
     private final int playerId;
 
-    private final Map<MCTSNode<Risk, RiskAction>, Integer> successes = new HashMap<>(); // needed only for taylor sampling
-    private final Map<MCTSNode<Risk, RiskAction>, Integer> failures = new HashMap<>(); // needed only for taylor sampling
-
+    private final Map<MCTSNode<T, A>, Integer> successes = new HashMap<>(); // needed only for taylor sampling
+    private final Map<MCTSNode<T, A>, Integer> failures = new HashMap<>(); // needed only for taylor sampling
+    private final Map<T, List<MCTSNode<T,A>>> stateToNodes = new IdentityHashMap<>();
 
     public MCTSTree(T rootContent, MCTSSelectionStrategy<T, A> selectionStrategy, MCTSExpansionStrategy<T, A> expansionStrategy, MCTSSimulationStrategy<T, A> simulationStrategy, MCTSBackpropagationStrategy<T, A> backpropagationStrategy, int playerId) {
         this.selectionStrategy = selectionStrategy;
         this.expansionStrategy = expansionStrategy;
         this.simulationStrategy = simulationStrategy;
         this.backpropagationStrategy = backpropagationStrategy;
-        this.root = new MCTSNode<>(rootContent, null, null, playerId);
+        this.root = new MCTSNode<>(rootContent, null, null, playerId, this);
         this.playerId = playerId;
     }
 
@@ -53,60 +53,46 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
         backpropagationStrategy.backpropagate(node, actions, utility, this);
     }
 
-    /**
-     * This method updates the successes and failures hashmaps for taylor sampling.
-     * If the utility increases after an action it is deemed a success. If it decreases it is deemed a failure.
-     *
-     * @param toUpdate the Node to update the maps for
-     * @param utilBefore the utility before the action (assumed to be 0.5 for the game start)
-     * @param utilAfter the utility after the action
-     */
-    public void updateSucessesAndFailures(MCTSNode<Risk, RiskAction> toUpdate, double utilBefore, double utilAfter) {
-        if (utilBefore >= utilAfter) {
-            if (this.failures.containsKey(toUpdate)) {
-                int failuresCountUpdate = this.failures.get(toUpdate) + 1;
-                this.failures.put(toUpdate, failuresCountUpdate);
-            } else {
-                this.failures.put(toUpdate, 1);
-            }
-        } else {
-            if (this.successes.containsKey(toUpdate)) {
-                int successesCountUpdate = this.successes.get(toUpdate) + 1;
-                this.successes.put(toUpdate, successesCountUpdate);
-            } else {
-                this.successes.put(toUpdate, 1);
-            }
-        }
-    }
-
-    public Map<MCTSNode<Risk, RiskAction>, Integer> getSuccesses() {
-        return successes;
-    }
-
-    public Map<MCTSNode<Risk, RiskAction>, Integer> getFailures() {
-        return failures;
-    }
 
     /**
      * This method returns the best action according to the current tree. It will return the action accessible from the root node with the highest average utility.
      * @return The best action according to the current tree.
      */
     public A getBestAction() {
+        System.out.println("Root visits: " + root.getVisits());
+        System.out.println("map: " + stateToNodes.values().stream().map(List::size).reduce(0, Integer::sum));
         return root.getChildren()
           .stream()
           .max(Comparator.comparingDouble(MCTSNode::getAverageUtility))
           .map(MCTSNode::getAction)
-          .orElse(null);
+          .orElse(root.getChildren().get(new Random().nextInt(root.getChildren().size())).getAction());
     }
 
-    public List<MCTSNode<Risk, RiskAction>> getAllNodesForState(Risk state, MCTSTree<Risk, RiskAction> tree) {
-        List<MCTSNode<Risk, RiskAction>> listOfNodesForState = new LinkedList<MCTSNode<Risk, RiskAction>>();
-        for (MCTSNode<Risk, RiskAction> node : tree){
+    public List<MCTSNode<T, A>> getAllNodesForState(T state, MCTSTree<T, A> tree) {
+        List<MCTSNode<T, A>> listOfNodesForState = new LinkedList<>();
+        for (MCTSNode<T, A> node : tree){
             if (node.getState().equals(state)) {
                 listOfNodesForState.add(node);
             }
         }
+
+        if (!listOfNodesForState.isEmpty()) {
+            System.out.println("Found one (list)");
+        }
+
+        if (stateToNodes.get(state) != null) {
+            System.out.println("Found one (map)");
+        }
+
         return listOfNodesForState;
+        //return stateToNodes.getOrDefault(state, new ArrayList<>());
+    }
+
+    public void onAdd(MCTSNode<T, A> node) {
+        if (!stateToNodes.containsKey(node.getState())) {
+            stateToNodes.put(node.getState(), new ArrayList<>());
+        }
+        stateToNodes.get(node.getState()).add(node);
     }
 
     @Override
