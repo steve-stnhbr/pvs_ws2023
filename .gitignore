@@ -43,3 +43,12 @@ bin/
 .DS_Store
 
 out*
+
+**/resources/**.jar
+**/resources/*.jar
+**/generated/**.jar
+**/generated/*.jar
+*/resource/**.jar
+*/resources/*.jar
+*/generated/**.jar
+*/generated/*.jar

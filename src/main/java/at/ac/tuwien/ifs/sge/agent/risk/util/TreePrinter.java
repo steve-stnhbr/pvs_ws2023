@@ -1,23 +1,10 @@
 package at.ac.tuwien.ifs.sge.agent.risk.util;
 
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.layout.mxCircleLayout;
-import com.mxgraph.layout.mxIGraphLayout;
-import com.mxgraph.util.mxCellRenderer;
-import org.jgrapht.Graph;
-import org.jgrapht.ext.JGraphXAdapter;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-
-import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class TreePrinter {
 
+  /*
   public static <T extends TreeNode> Graph<TreeNode, DefaultEdge> createTree(T root) {
     Graph<TreeNode, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
     graph.addVertex(root);
@@ -51,6 +38,7 @@ public class TreePrinter {
       buildGraph(child, graph);
     }
   }
+  */
 
   public interface TreeNode {
     public List<? extends TreeNode> getChildren();

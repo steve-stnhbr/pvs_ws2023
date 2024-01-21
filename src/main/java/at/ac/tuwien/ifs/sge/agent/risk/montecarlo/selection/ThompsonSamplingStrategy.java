@@ -10,9 +10,6 @@ import org.apache.commons.math3.distribution.BetaDistribution;
 
 public class ThompsonSamplingStrategy<T, A> extends MCTSSelectionStrategy<Risk, RiskAction> {
 
-    public ThompsonSamplingStrategy(int possibleActions) {
-    }
-
     @Override
     public MCTSNode<Risk, RiskAction> select(MCTSNode<Risk, RiskAction> root, MCTSTree<Risk, RiskAction> tree) {
         Risk risk = root.getState();

@@ -80,7 +80,7 @@ public class PerformanceTestCommand {
       player1Path = player1Name;
       player2Path = player2Name;
       gamePath = gameName;
-      managePath = Objects.requireNonNullElseGet(manageName, () -> extractJAR("/sge.jar"));
+      managePath = Objects.requireNonNullElseGet(manageName, () -> "/sge.jar");
     }
 
     System.out.printf("player1Path = %s, player2Path = %s, gamePath = %s, managePath = %s%n", player1Path, player2Path, gamePath, managePath);
@@ -138,11 +138,13 @@ public class PerformanceTestCommand {
       // Print the exit value of the process
       interactor.write("Exit value: " + process.exitValue());
       extractScore(outputLines, moves, managePath, gamePath, player1Path, player2Path);
-      // delete the temporary files
-      deleted(player1Path);
-      deleted(player2Path);
-      deleted(gamePath);
-      deleted(managePath);
+      if (extractJars) {
+        // delete the temporary files
+        deleted(player1Path);
+        deleted(player2Path);
+        deleted(gamePath);
+        deleted(managePath);
+      }
       synchronized (spawnedProcesses) {
         spawnedProcesses.remove(process);
       }
@@ -288,12 +290,18 @@ public class PerformanceTestCommand {
       players = Arrays.stream(getResourceListing(PerformanceTestCommand.class, "agents/")).map(s -> "agents/" + s).toArray(String[]::new);
     }
 
+
+    String gamePath;
+    String manage;
     if (extractBefore) {
       players = Arrays.stream(players).parallel().map(PerformanceTestCommand::extractJAR).toArray(String[]::new);
-    }
 
-    String gamePath = extractJAR(game);
-    String manage = extractJAR("/sge.jar");
+      gamePath = extractJAR(game);
+      manage = extractJAR("/sge.jar");
+    } else {
+      manage = "/sge.jar";
+      gamePath = game;
+    }
 
     LineManager lineManager = new LineManager(numThreads);
 

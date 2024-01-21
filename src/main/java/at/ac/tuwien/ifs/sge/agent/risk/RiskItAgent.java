@@ -4,7 +4,6 @@ import at.ac.tuwien.ifs.sge.agent.AbstractGameAgent;
 import at.ac.tuwien.ifs.sge.agent.GameAgent;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.MCTSTree;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.AMAFBackpropagationStrategy;
-import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.BasicBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropagationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
@@ -12,21 +11,16 @@ import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrateg
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.UCB1SelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
-import at.ac.tuwien.ifs.sge.agent.risk.util.FireAndForget;
-import at.ac.tuwien.ifs.sge.agent.risk.util.TreePrinter;
 import at.ac.tuwien.ifs.sge.engine.Logger;
 import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
 import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
-import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
-import org.checkerframework.checker.units.qual.A;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.nio.dot.DOTExporter;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.concurrent.TimeUnit;
 
 public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
@@ -53,12 +47,35 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
     );
   }
 
-  public RiskItAgent(Logger log, MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy, MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy, MCTSSimulationStrategy<Risk, RiskAction> simulationStrategy, MCTSBackpropagationStrategy<Risk, RiskAction> backpropagationStrategy) {
+  public RiskItAgent(Logger log, MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy, MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy, MCTSSimulationStrategy<Risk, RiskAction> simulationStrategy,
+                     MCTSBackpropagationStrategy<Risk, RiskAction> backpropagationStrategy) {
     super(3D / 4D, 5, TimeUnit.SECONDS, log);
     this.selectionStrategy = selectionStrategy;
     this.expansionStrategy = expansionStrategy;
     this.simulationStrategy = simulationStrategy;
     this.backpropagationStrategy = backpropagationStrategy;
+
+    log.inff("Using selection strategies: %n\t%s,%n\t%s,%n\t%s,%n\t%s",
+      selectionStrategy.getClass().getSimpleName(),
+      expansionStrategy.getClass().getSimpleName(),
+      simulationStrategy.getClass().getSimpleName(),
+      backpropagationStrategy.getClass().getSimpleName());
+  }
+
+  private static MCTSSelectionStrategy<Risk, RiskAction> getDefaultSelectionStrategy() {
+    return DEFAULT_SELECTION_STRATEGY;
+  }
+
+  private static MCTSExpansionStrategy<Risk, RiskAction> getDefaultExpansionStrategy() {
+    return DEFAULT_EXPANSION_STRATEGY;
+  }
+
+  private static MCTSSimulationStrategy<Risk, RiskAction> getDefaultSimulationStrategy() {
+    return DEFAULT_SIMULATION_STRATEGY;
+  }
+
+  private static MCTSBackpropagationStrategy<Risk, RiskAction> getDefaultBackpropagationStrategy() {
+    return DEFAULT_BACKPROPAGATION_STRATEGY;
   }
 
   @Override
@@ -96,18 +113,5 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   @Override
   public void destroy() {
     //Do some tear down after the TOURNAMENT
-  }
-
-  private static MCTSSelectionStrategy<Risk, RiskAction> getDefaultSelectionStrategy() {
-    return DEFAULT_SELECTION_STRATEGY;
-  }
-  private static MCTSExpansionStrategy<Risk, RiskAction> getDefaultExpansionStrategy() {
-      return DEFAULT_EXPANSION_STRATEGY;
-  }
-  private static MCTSSimulationStrategy<Risk, RiskAction> getDefaultSimulationStrategy() {
-      return DEFAULT_SIMULATION_STRATEGY;
-  }
-  private static MCTSBackpropagationStrategy<Risk, RiskAction> getDefaultBackpropagationStrategy() {
-      return DEFAULT_BACKPROPAGATION_STRATEGY;
   }
 }

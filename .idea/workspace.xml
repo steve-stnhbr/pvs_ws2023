@@ -10,7 +10,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/MainPerformanceTestCommand.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/Instantiator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/PerformanceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/PerformanceTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/AgentGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/AgentGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/TreePrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/util/TreePrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,28 +83,54 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Debug",
+    "Application.PerformanceTestCommand.executor": "Run",
+    "Gradle.Build pvs_ws2023.executor": "Run",
+    "Gradle.pvs_ws2023 [:AgentGenerator.main()].executor": "Run",
+    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Run",
+    "Gradle.pvs_ws2023 [dependencies].executor": "Run",
+    "Gradle.pvs_ws2023:perftest [:perftest:PerformanceTestCommand.main()].executor": "Run",
+    "Gradle.pvs_ws2023:perftest:java [:perftest:java:PerformanceTestCommand.main()].executor": "Run",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
-    "node.js.selected.package.tslint": "(autodetect)"
+    "jdk.selected.JAVA_MODULE": "11",
+    "last_directory_selection": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/perftest/src/main/java/at/ac/tuwien",
+    "last_opened_file_path": "/Users/steve/Desktop/Uni/7. Semester Medieninformatik/PVS - Programmierung von Strategiespielen/UE/agent/pvs_ws2023/src/main/resources/agents",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2410314",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/test/resources/agents" />
-      <recent name="$PROJECT_DIR$/src/test/resources" />
-      <recent name="$PROJECT_DIR$/src/test/resources/games" />
+      <recent name="$PROJECT_DIR$/src/main/resources/agents" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/perftest/src/perftest" />
+      <recent name="$PROJECT_DIR$/perftest/java/src/main/resources" />
+      <recent name="$PROJECT_DIR$/perftest/java/src/main" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perftest/src/perftest" />
+      <recent name="$PROJECT_DIR$/perftest/src/main/resources" />
+      <recent name="$PROJECT_DIR$/perftest/src/main" />
+      <recent name="$PROJECT_DIR$/src" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="at.ac.tuwien.ifs.sge.agent.risk.test" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="at.ac.tuwien.ifs.sge.agent.risk.test" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.PerformanceTestCommandAll">
-    <configuration name="DNNTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.util.DNNTest" />
+  <component name="RunManager" selected="Application.PerformanceTestCommand">
+    <configuration name="AgentGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.AgentGenerator" />
       <module name="RiskItForTheBiscuit.main" />
+      <option name="PROGRAM_PARAMETERS" value="build/libs/RiskItForTheBiscuit.jar" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.util.*" />
+          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -99,9 +138,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PerformanceTestCommandAll" type="Application" factoryName="Application" temporary="true">
+    <configuration name="PerformanceTestCommand" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.test.PerformanceTestCommand" />
       <module name="RiskItForTheBiscuit.test" />
+      <option name="PROGRAM_PARAMETERS" value="--threads=1" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.test.*" />
@@ -112,22 +152,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RiskDataGeneration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.util.RiskDataGeneration" />
+    <configuration name="PerformanceTestCommand" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.test.PerformanceTestCommand" />
       <module name="RiskItForTheBiscuit.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.util.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SelfPlay" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.SelfPlay" />
-      <module name="RiskItForTheBiscuit.main" />
+      <option name="PROGRAM_PARAMETERS" value="--threads=1" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.test.*" />
@@ -137,25 +165,46 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="pvs_ws2023 [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
     </configuration>
     <configuration name="RiskItForTheBiscuit.jar" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/PerformanceTestCommand_jar/RiskItForTheBiscuit.jar" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.PerformanceTestCommandAll" />
-      <item itemvalue="Application.SelfPlay" />
-      <item itemvalue="Application.DNNTest" />
-      <item itemvalue="Application.RiskDataGeneration" />
+      <item itemvalue="Application.PerformanceTestCommand" />
+      <item itemvalue="Application.AgentGenerator" />
+      <item itemvalue="Gradle.pvs_ws2023 [dependencies]" />
       <item itemvalue="JAR Application.RiskItForTheBiscuit.jar" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PerformanceTestCommand" />
+        <item itemvalue="Application.PerformanceTestCommand" />
+        <item itemvalue="Gradle.pvs_ws2023 [dependencies]" />
+        <item itemvalue="Application.AgentGenerator" />
         <item itemvalue="JAR Application.RiskItForTheBiscuit.jar" />
-        <item itemvalue="Application.PerformanceTestCommandAll" />
-        <item itemvalue="Application.SelfPlay" />
-        <item itemvalue="Application.DNNTest" />
-        <item itemvalue="Application.RiskDataGeneration" />
       </list>
     </recent_temporary>
   </component>
@@ -216,7 +265,25 @@
           <line>260</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java</url>
+          <line>106</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java</url>
+          <line>139</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/src/main/resources/agents/agent_FPUSelectionStrategy_RandomExpansionStrategy_HeuristicSimulationStrategy_AMAFBackpropagationStrategy.jar!/at/ac/tuwien/ifs/sge/agent/risk/RiskItAgent.class</url>
+          <line>52</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint enabled="true" type="javascript-exception" />
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
 </project>

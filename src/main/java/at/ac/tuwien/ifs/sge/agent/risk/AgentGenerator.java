@@ -1,8 +1,15 @@
 package at.ac.tuwien.ifs.sge.agent.risk;
 
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.backpropagation.MCTSBackpropagationStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
+import at.ac.tuwien.ifs.sge.game.risk.board.Risk;
+import at.ac.tuwien.ifs.sge.game.risk.board.RiskAction;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FixedValue;
+import net.bytebuddy.implementation.MethodCall;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,13 +25,19 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
+import java.util.stream.Collectors;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
 public class AgentGenerator {
   private static final Class<?> agentClass = RiskItAgent.class;
+  private static final String agentPackageLocation = agentClass.getPackageName() + "." + agentClass.getSimpleName();
+  private static final String agentEntryLocation = agentPackageLocation.replace('.', '/') + ".class";
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    Process jar = Runtime.getRuntime().exec("gradle jar");
+    jar.waitFor();
+    System.out.println("Super build finished");
     List<Class<?>> selectionMethods = getInstantiableClasses("at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection");
     List<Class<?>> expansionMethods = getInstantiableClasses("at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion");
     List<Class<?>> simulationMethods = getInstantiableClasses("at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation");
@@ -32,15 +45,15 @@ public class AgentGenerator {
 
     List<List<Class<?>>> permutations = generatePermutations(List.of(selectionMethods, expansionMethods, simulationMethods, backpropagationMethods));
 
-    for (List<Class<?>> permutation : permutations) {
-      Class<?> selectionMethod = permutation.get(0);
-      Class<?> expansionMethod = permutation.get(1);
-      Class<?> simulationMethod = permutation.get(2);
-      Class<?> backpropagationMethod = permutation.get(3);
+    permutations.parallelStream()
+      .forEach(permutation -> {
+        Class<?> selectionMethod = permutation.get(0);
+        Class<?> expansionMethod = permutation.get(1);
+        Class<?> simulationMethod = permutation.get(2);
+        Class<?> backpropagationMethod = permutation.get(3);
 
-      //new Thread(() -> generateModification(args[0], manifest, selectionMethod, expansionMethod, simulationMethod, backpropagationMethod)).start();
-      generateModification(args[0], selectionMethod, expansionMethod, simulationMethod, backpropagationMethod);
-    }
+        generateModification(args[0], selectionMethod, expansionMethod, simulationMethod, backpropagationMethod);
+      });
   }
 
   private static void generateModification(String input, Class<?> selectionMethod, Class<?> expansionMethod, Class<?> simulationMethod, Class<?> backpropagationMethod) {
@@ -62,7 +75,7 @@ public class AgentGenerator {
     }
     Manifest manifest = new Manifest();
     manifest.getMainAttributes().put(new Attributes.Name("Sge-Type"), "agent");
-    manifest.getMainAttributes().put(new Attributes.Name("Agent-Class"), "at.ac.tuwien.ifs.sge.agent.risk.RiskItAgent");
+    manifest.getMainAttributes().put(new Attributes.Name("Agent-Class"), agentPackageLocation);
     manifest.getMainAttributes().put(new Attributes.Name("Agent-Name"), file.getName());
     manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
 
@@ -75,7 +88,7 @@ public class AgentGenerator {
       manifest.write(jos);
       jos.closeEntry();
       // Copy entries from the existing JAR to the new JAR
-      copyJarEntries(jis, jos);
+      copyJarEntries(jis, jos, List.of(agentEntryLocation));
 
       // Modify the specified class in the new JAR
       modifyClass(jos, name, selectionMethod, expansionMethod, simulationMethod, backpropagationMethod);
@@ -88,7 +101,7 @@ public class AgentGenerator {
 
   private static void modifyClass(JarOutputStream jos, String name, Class<?> selectionMethod, Class<?> expansionMethod, Class<?> simulationMethod, Class<?> backpropagationMethod) throws IOException {
     // Create a new entry for the class
-    JarEntry entry = new JarEntry(name + ".class");
+    JarEntry entry = new JarEntry(agentEntryLocation);
     jos.putNextEntry(entry);
 
     // Write the modified class bytes to the jar file
@@ -97,24 +110,25 @@ public class AgentGenerator {
     jos.closeEntry();
   }
 
-  private static byte[] getModifiedClassBytes(String name, Class<?> selectionMethod, Class<?> expansionMethod, Class<?> simulationMethod, Class<?> backpropagationMethod) throws IOException {
+  private static byte[] getModifiedClassBytes(String name, Class<?> selectionMethod, Class<?> expansionMethod, Class<?> simulationMethod, Class<?> backpropagationMethod) {
     // Byte Buddy transformation
-    Object selectionInstance = createInstance(selectionMethod);
-    Object expansionInstance = createInstance(expansionMethod);
-    Object simulationInstance = createInstance(simulationMethod);
-    Object backpropagationInstance = createInstance(backpropagationMethod);
+    DynamicType.Unloaded<?> unloaded = null;
+    try {
+      unloaded = new ByteBuddy()
+        .redefine(agentClass)
+        .method(named("getDefaultSelectionStrategy"))
+        .intercept(MethodCall.invoke(Instantiator.class.getDeclaredMethod("createInstanceSelection", Class.class)).with(selectionMethod))
+        .method(named("getDefaultExpansionStrategy"))
+        .intercept(MethodCall.invoke(Instantiator.class.getDeclaredMethod("createInstanceExpansion", Class.class)).with(expansionMethod))
+        .method(named("getDefaultSimulationStrategy"))
+        .intercept(MethodCall.invoke(Instantiator.class.getDeclaredMethod("createInstanceSimulation", Class.class)).with(simulationMethod))
+        .method(named("getDefaultBackpropagationStrategy"))
+        .intercept(MethodCall.invoke(Instantiator.class.getDeclaredMethod("createInstanceBackpropagation", Class.class)).with(backpropagationMethod))
+        .make();
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    }
 
-    DynamicType.Unloaded<?> unloaded = new ByteBuddy()
-      .subclass(agentClass)
-      .method(named("getDefaultSelectionStrategy"))
-      .intercept(FixedValue.value(selectionInstance))
-      .method(named("getDefaultExpansionStrategy"))
-      .intercept(FixedValue.value(expansionInstance))
-      .method(named("getDefaultSimulationStrategy"))
-      .intercept(FixedValue.value(simulationInstance))
-      .method(named("getDefaultBackpropagationStrategy"))
-      .intercept(FixedValue.value(backpropagationInstance))
-      .make();
     return unloaded.getBytes();
   }
 
@@ -128,12 +142,25 @@ public class AgentGenerator {
     }
   }
 
-  private static void copyJarEntries(JarInputStream jis, JarOutputStream jos) throws IOException {
+  private static <T> T createInstanceTyped(Class<T> clazz) {
+    try {
+      Constructor<T> constructor = clazz.getDeclaredConstructor();
+      constructor.setAccessible(true);
+      return constructor.newInstance();
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private static void copyJarEntries(JarInputStream jis, JarOutputStream jos, List<String> exclude) throws IOException {
     byte[] buffer = new byte[1024];
     int bytesRead;
     JarEntry entry;
 
     while ((entry = jis.getNextJarEntry()) != null) {
+      if (exclude.contains(entry.getName())) {
+        continue;
+      }
       jos.putNextEntry(entry);
 
       while ((bytesRead = jis.read(buffer, 0, buffer.length)) != -1) {

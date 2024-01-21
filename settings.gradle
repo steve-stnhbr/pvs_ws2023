@@ -1,2 +1,7 @@
 rootProject.name = 'RiskItForTheBiscuit'
+include 'perftest'
+include 'perftest'
+include 'perftest'
+include 'perftest:java'
+findProject(':perftest:java')?.name = 'java'
 
