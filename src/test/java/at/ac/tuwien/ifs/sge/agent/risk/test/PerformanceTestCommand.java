@@ -44,7 +44,7 @@ public class PerformanceTestCommand {
     this.interactor = interactor;
   }
 
-  public void run(int timeout, String player1Name, String player2Name, String gameName) {
+  public void run(int timeout, String player1Name, String player2Name, String gameName, String manageName, boolean extractJars) {
     this.timeout = timeout;
     if (player1Name == null) {
       player1Name = "agents/mctsagent.jar";
@@ -66,10 +66,21 @@ public class PerformanceTestCommand {
         gameName = "/" + gameName;
     }
 
-    String player1Path = extractJAR(player1Name);
-    String player2Path = extractJAR(player2Name);
-    String gamePath = extractJAR(gameName);
-    String managePath = extractJAR("/sge.jar");
+    String player1Path;
+    String player2Path;
+    String gamePath;
+    String managePath;
+    if (extractJars) {
+      player1Path = extractJAR(player1Name);
+      player2Path = extractJAR(player2Name);
+      gamePath = extractJAR(gameName);
+      managePath = extractJAR(manageName == null ? "/sge.jar" : manageName);
+    } else {
+      player1Path = player1Name;
+      player2Path = player2Name;
+      gamePath = gameName;
+      managePath = manageName == null ? "/sge.jar" : manageName;
+    }
 
     System.out.printf("player1Path = %s, player2Path = %s, gamePath = %s, managePath = %s%n", player1Path, player2Path, gamePath, managePath);
     String[] command = new String[] {
@@ -154,9 +165,12 @@ public class PerformanceTestCommand {
     return deleted;
   }
 
-  private String extractJAR(String name) {
+  private static String extractJAR(String name) {
+    if (!name.startsWith("/")) {
+      name = "/" + name;
+    }
     System.out.println("Extracting " + name);
-    try(JarInputStream jarInputStream = new JarInputStream(getClass().getResourceAsStream(name));) {
+    try(JarInputStream jarInputStream = new JarInputStream(PerformanceTestCommand.class.getResourceAsStream(name));) {
       File outputDir = Files.createTempDir();
       File outputFile = new File(outputDir, name);
       if (!outputFile.getParentFile().exists()) {
@@ -226,9 +240,12 @@ public class PerformanceTestCommand {
 
   public static void main(String[] args) throws URISyntaxException, IOException {
     Map<String, String> argMap = convertToKeyValuePair(args);
-    int numThreads = Runtime.getRuntime().availableProcessors() * 2;
-    LineManager lineManager = new LineManager(numThreads);
-    int timeout = 10000;
+
+    int numThreads = Integer.parseInt(argMap.getOrDefault("threads", String.valueOf(Runtime.getRuntime().availableProcessors() * 2)));
+    int timeout = Integer.parseInt(argMap.getOrDefault("timeout", "10000"));
+    final boolean extractBefore = Boolean.parseBoolean(argMap.getOrDefault("extract_early", "true"));
+    String game = argMap.getOrDefault("game", "games/sge-risk.jar");
+
     String[] players;
 
     if (argMap.containsKey("players")) {
@@ -241,9 +258,14 @@ public class PerformanceTestCommand {
       players = Arrays.stream(getResourceListing(PerformanceTestCommand.class, "agents/")).map(s -> "agents/" + s).toArray(String[]::new);
     }
 
+    if (extractBefore) {
+      players = Arrays.stream(players).map(PerformanceTestCommand::extractJAR).toArray(String[]::new);
+    }
+
+    LineManager lineManager = new LineManager(numThreads);
+
     System.out.println("Players: " + Arrays.toString(players));
 
-    String game = argMap.getOrDefault("game", "games/sge-risk.jar");
 
     List<Tuple<String, String>> permutations = generatePermutations(players);
 
@@ -251,15 +273,18 @@ public class PerformanceTestCommand {
       int finalI = i;
       Thread thread = new Thread(() -> {
         int runs = 0;
-        PerformanceTestCommand pt = new PerformanceTestCommand(lineManager.getInteractor(finalI).setPrefix("PerformanceTest#" + finalI + ": "));
         while(!Thread.interrupted()) {
+          //PerformanceTestCommand pt = new PerformanceTestCommand(lineManager.getInteractor(finalI).setPrefix("PerformanceTest#" + finalI + ": "));
+          PerformanceTestCommand pt = new PerformanceTestCommand(new LineManager.Interactor.Default());
           Tuple<String, String> perm = permutations.get((finalI + runs)  % permutations.size());
           System.out.println("Starting game " + game + " player1: " + perm.getA() + " player2: " + perm.getB());
           pt.run(
             timeout * (((finalI + runs) % 4) + 1),
             perm.getA(),
             perm.getB(),
-            game
+            game,
+            null,
+            !extractBefore
             );
           runs++;
         }
@@ -275,24 +300,26 @@ public class PerformanceTestCommand {
             if (p != null) {
               System.out.println("Destroying process");
               p.destroy();
-              try {
-                Thread.sleep(1000);
-              } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-              }
+            }
+          }
+        }
+
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+        }
+
+        synchronized (spawnedProcesses) {
+          for (Process p : spawnedProcesses) {
+            if (p != null) {
+              System.out.println("Killing process");
               p.destroyForcibly();
             }
           }
         }
       }));
     }
-  }
-
-  private static File[] getResourceFolderFiles (String folder) {
-    ClassLoader loader = Thread.currentThread().getContextClassLoader();
-    URL url = loader.getResource(folder);
-    String path = url.getPath();
-    return new File(path).listFiles();
   }
 
   /**

@@ -9,12 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="Changed Thompson Sampling implementation. Added Backpropagation strategy for this and modified the Tree class to store a Map of successes as well as failures for all nodes.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/ThompsonSamplingBackpropagationStrategy.java" afterDir="false" />
+    <list default="true" id="74e294ff-04b8-4e81-af35-e245fec859d9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/MCTSTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/BasicBackpropagationStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/backpropagation/BasicBackpropagationStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/ac/tuwien/ifs/sge/agent/risk/montecarlo/selection/ThompsonSamplingStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/at/ac/tuwien/ifs/sge/agent/risk/test/PerformanceTestCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +68,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.pvs_ws2023 [:PerformanceTestCommand.main()].executor": "Debug",
+    "git-widget-placeholder": "master",
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/resources/agents" />
@@ -98,7 +102,6 @@
     <configuration name="PerformanceTestCommandAll" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="at.ac.tuwien.ifs.sge.agent.risk.test.PerformanceTestCommand" />
       <module name="RiskItForTheBiscuit.test" />
-      <option name="PROGRAM_PARAMETERS" value="--players=agents/mctsagent.jar,agents/RiskItForTheBiscuit_ucb1_random_random_basic.jar,agents/RiskItForTheBiscuit_ucb1_random_random_amaf.jar" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="at.ac.tuwien.ifs.sge.agent.risk.test.*" />
@@ -199,12 +202,11 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="merge" />
     <MESSAGE value="Changed Thompson Sampling implementation. Added Backpropagation strategy for this and modified the Tree class to store a Map of successes as well as failures for all nodes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed Thompson Sampling implementation. Added Backpropagation strategy for this and modified the Tree class to store a Map of successes as well as failures for all nodes." />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
