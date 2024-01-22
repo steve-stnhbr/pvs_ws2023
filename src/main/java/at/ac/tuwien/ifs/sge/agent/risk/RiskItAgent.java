@@ -9,6 +9,7 @@ import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.MCTSExpansionStrateg
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.expansion.RandomExpansionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.MCTSSelectionStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.ThompsonSamplingStrategy;
+import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.selection.ThompsonSamplingWithUCB1Strategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.MCTSSimulationStrategy;
 import at.ac.tuwien.ifs.sge.agent.risk.montecarlo.simulation.RandomSimulationStrategy;
 import at.ac.tuwien.ifs.sge.engine.Logger;
@@ -21,7 +22,7 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   GameAgent<Risk, RiskAction> {
   public static final int SIMULATION_STEPS = 250;
 
-  private static final MCTSSelectionStrategy<Risk, RiskAction> DEFAULT_SELECTION_STRATEGY = new ThompsonSamplingStrategy();
+  private static final MCTSSelectionStrategy<Risk, RiskAction> DEFAULT_SELECTION_STRATEGY = new ThompsonSamplingWithUCB1Strategy();
   private static final MCTSExpansionStrategy<Risk, RiskAction> DEFAULT_EXPANSION_STRATEGY = new RandomExpansionStrategy();
   private static final MCTSSimulationStrategy<Risk, RiskAction> DEFAULT_SIMULATION_STRATEGY = new RandomSimulationStrategy();
   private static final MCTSBackpropagationStrategy<Risk, RiskAction> DEFAULT_BACKPROPAGATION_STRATEGY = new ThompsonSamplingBackpropagationStrategy();

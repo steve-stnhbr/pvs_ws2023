@@ -71,7 +71,7 @@ tasks.register('copyAgents', Copy) {
 tasks.register("buildPerfTest", Jar) {
     var copyAgents = project.hasProperty('copyAgents')
     if (copyAgents) {
-        dependsOn 'copyAgents'
+        //dependsOn 'copyAgents'
     }
 
     dependsOn 'classes', 'processResources'

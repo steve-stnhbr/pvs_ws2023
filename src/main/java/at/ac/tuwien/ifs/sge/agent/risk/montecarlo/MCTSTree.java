@@ -21,8 +21,7 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
     private final MCTSBackpropagationStrategy<T, A> backpropagationStrategy;
     private final int playerId;
 
-    //private final Map<T, List<MCTSNode<T,A>>> stateToNodes = new HashMap<>();
-    private final Map<Integer, List<MCTSNode<T,A>>> stateToNodes = new HashMap<>();
+    private final Map<T, List<MCTSNode<T,A>>> stateToNodes = new HashMap<>();
 
     public MCTSTree(T rootContent, MCTSSelectionStrategy<T, A> selectionStrategy, MCTSExpansionStrategy<T, A> expansionStrategy, MCTSSimulationStrategy<T, A> simulationStrategy, MCTSBackpropagationStrategy<T, A> backpropagationStrategy, int playerId) {
         this.selectionStrategy = selectionStrategy;
@@ -59,10 +58,6 @@ public class MCTSTree<T, A> implements Iterable<MCTSNode<T, A>> {
      * @return The best action according to the current tree.
      */
     public A getBestAction() {
-        System.out.println("Root visits: " + root.getVisits());
-        System.out.println("map: " + stateToNodes.values().stream().map(List::size).reduce(0, Integer::sum));
-        System.out.println(stateToNodes);
-        System.out.println("tree:" + this.stream().count());
         return root.getChildren()
           .stream()
           .max(Comparator.comparingDouble(MCTSNode::getAverageUtility))
