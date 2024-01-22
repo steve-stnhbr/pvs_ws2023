@@ -25,7 +25,7 @@ public class RiskItAgent extends AbstractGameAgent<Risk, RiskAction> implements
   private static final MCTSSelectionStrategy<Risk, RiskAction> DEFAULT_SELECTION_STRATEGY = new ThompsonSamplingWithUCB1Strategy();
   private static final MCTSExpansionStrategy<Risk, RiskAction> DEFAULT_EXPANSION_STRATEGY = new RandomExpansionStrategy();
   private static final MCTSSimulationStrategy<Risk, RiskAction> DEFAULT_SIMULATION_STRATEGY = new RandomSimulationStrategy();
-  private static final MCTSBackpropagationStrategy<Risk, RiskAction> DEFAULT_BACKPROPAGATION_STRATEGY = new ThompsonSamplingBackpropagationStrategy();
+  private static final MCTSBackpropagationStrategy<Risk, RiskAction> DEFAULT_BACKPROPAGATION_STRATEGY = new ThompsonSamplingBackpropagationStrategyModified();
 
   private final MCTSSelectionStrategy<Risk, RiskAction> selectionStrategy;
   private final MCTSExpansionStrategy<Risk, RiskAction> expansionStrategy;
